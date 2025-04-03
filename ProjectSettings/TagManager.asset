@@ -2,20 +2,22 @@
 %TAG !u! tag:unity3d.com,2011:
 --- !u!78 &1
 TagManager:
-  serializedVersion: 2
-  tags: []
+  serializedVersion: 3
+  tags:
+  - Cell
+  - Player_Character
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Ground
   - Water
   - UI
-  - 
-  - 
-  - 
-  - 
-  - 
+  - Player
+  - Player_Projectile
+  - Enemy
+  - Enemy_Projectile
+  - Cell
   - 
   - 
   - 
@@ -41,3 +43,23 @@ TagManager:
   - name: Default
     uniqueID: 0
     locked: 0
+  - name: Background
+    uniqueID: 4037930931
+    locked: 0
+  - name: Player
+    uniqueID: 663363867
+    locked: 0
+  - name: VFX
+    uniqueID: 2596274685
+    locked: 0
+  - name: Foreground
+    uniqueID: 2908087469
+    locked: 0
+  - name: Mine
+    uniqueID: 4138680025
+    locked: 0
+  - name: UI
+    uniqueID: 2926879685
+    locked: 0
+  m_RenderingLayers:
+  - Default

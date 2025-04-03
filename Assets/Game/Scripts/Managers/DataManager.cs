@@ -18,7 +18,10 @@ public class DataManager : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public int field;
+            public int emptyCell;
+            public int ironCell;
+            public int metalCell;
+            public int goldCell;
             public static DataManager instance;
 
     #endregion
