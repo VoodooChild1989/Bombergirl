@@ -93,7 +93,7 @@ public class PlayerInteraction : MonoBehaviour
         {
             if(obj.gameObject.CompareTag("Trigger"))
             {
-                obj.gameObject.GetComponent<TriggerSystem>().LowerLights();
+                obj.gameObject.GetComponent<ITrigger>().TriggerAction();
             }
         }
 

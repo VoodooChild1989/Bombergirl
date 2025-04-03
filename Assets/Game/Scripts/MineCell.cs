@@ -9,10 +9,7 @@ using TMPro;
 
 public enum OreType
 {
-    None,
-    Coal,
-    Crystal,
-    Gemstone
+    None, Coal, Crystal, Gemstone
 }
 
 public class PlatformerCell : MonoBehaviour
@@ -27,44 +24,47 @@ public class PlatformerCell : MonoBehaviour
             
             [Header("Basic Variables")]
             public string cellName;
-            public float chance;
-            public OreType curOreType;
             public int health;
-            public int posX;
-            public int posY;
             public GameObject prefab;
             public GameObject destructionVFX;
+            [ShowOnly] public OreType curOreType;
+            [ShowOnly] public int posX;
+            [ShowOnly] public int posY;
 
     #endregion
     
-    public void DamageCell(int damageAmount)
-    {
-        health -= damageAmount;
+    #region CUSTOM METHODS
 
-        if(health <= 0) DestroyCell();
-    }
+        public void DamageCell(int damageAmount)
+        {
+            health -= damageAmount;
 
-    [ContextMenu("DestroyCell")]
-    public void DestroyCell()
-    {
-        if(cellName == "Empty")
-        {
-            DataManager.instance.emptyCell++;
-        }       
-        else if(cellName == "Iron")
-        {
-            DataManager.instance.ironCell++;
-        }      
-        else if(cellName == "Metal")
-        {
-            DataManager.instance.metalCell++;
-        }      
-        else if(cellName == "Gold")
-        {
-            DataManager.instance.goldCell++;
-        }      
+            if(health <= 0) DestroyCell();
+        }
 
-        CellularAutomataAlgorithm.instance.RemoveCell(posX, posY, destructionVFX);
-    }
+        [ContextMenu("DestroyCell")]
+        public void DestroyCell()
+        {
+            if(cellName == "Empty")
+            {
+                DataManager.instance.emptyCell++;
+            }       
+            else if(cellName == "Iron")
+            {
+                DataManager.instance.ironCell++;
+            }      
+            else if(cellName == "Metal")
+            {
+                DataManager.instance.metalCell++;
+            }      
+            else if(cellName == "Gold")
+            {
+                DataManager.instance.goldCell++;
+            }      
+
+            CellularAutomataAlgorithm.instance.RemoveCell(posX, posY, destructionVFX);
+        }
+
+    #endregion
 
 }

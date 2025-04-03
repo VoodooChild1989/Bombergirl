@@ -30,6 +30,7 @@ public class PlayerMovement : MonoBehaviour
             private Vector3 lastPosition;
             private Rigidbody2D rb;
             private SpriteRenderer sr;
+            public bool isInDialogue;
 
             [Header("Jump Settings")]
             public int maxJumps = 2;
@@ -104,6 +105,12 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void FixedUpdate()
         {
+            if(isInDialogue)
+            {
+                DefaultState();
+                return;
+            }
+
             Ducking();
             Running();
             Jumping();
@@ -116,6 +123,13 @@ public class PlayerMovement : MonoBehaviour
     #endregion
 
     #region CUSTOM METHODS
+
+        void DefaultState()
+        {
+            rb.linearVelocity = new Vector2(0f, 0f);
+            rb.linearVelocity += Vector2.down * downwardJumpForce;
+            animationScript.ChangeAnimationState(IDLE_ANIMATION);  
+        }
 
         /// <summary>
         /// Checking if the player touches ground.

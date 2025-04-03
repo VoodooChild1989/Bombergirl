@@ -23,7 +23,7 @@ public class PlayerShooting : MonoBehaviour
             public int numberOfProjectilesPerWave;
             public float delayBetweenWaves;
             public float shootingCooldown;
-            public bool canShoot;
+            [ShowOnly] public bool canShoot;
             
             [Header("Super Charge")]
             public GameObject superChargeProjectile;

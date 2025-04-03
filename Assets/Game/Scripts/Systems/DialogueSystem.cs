@@ -3,6 +3,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
+using Unity.Cinemachine;
 
 /// <summary>
 /// A system used to manage dialogues in both default and cutscene modes.
@@ -18,14 +19,18 @@ public class DialogueSystem : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Input")]
+            public string characterName;
             public string[] lines;
             private int _currentIndexLine;
             public AudioClip[] sounds;
             private int _currentIndexSounds;
+            public CinemachineCamera camera;
+            public Vector3 offset;
 
             [Header("Extra")]
             public PlayableDirector timeline;
             public GameObject banner;
+            public TMP_Text characterNameTMP;
             public TMP_Text TMPtext;
             public bool isDialogueActive;
             public bool isLineAnimating;
@@ -55,11 +60,7 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            EndDialogue();
         }
 
         /// <summary>
@@ -109,6 +110,11 @@ public class DialogueSystem : MonoBehaviour
             banner.SetActive(true);
             _currentIndexLine = 0;
             _lineAnimation = StartCoroutine(LineAnimation(lines[_currentIndexLine]));
+
+            FindObjectOfType<PlayerMovement>().isInDialogue = true;
+            characterNameTMP.text = characterName;
+            camera.Follow = transform;
+            camera.GetComponent<CinemachineFollow>().FollowOffset = offset;
         }
         
         /// <summary>
@@ -158,6 +164,11 @@ public class DialogueSystem : MonoBehaviour
             isDialogueActive = false;
             banner.SetActive(false);
             TMPtext.text = "";
+            
+            FindObjectOfType<PlayerMovement>().isInDialogue = false;
+            characterNameTMP.text = "";
+            camera.Follow = FindObjectOfType<PlayerMovement>().gameObject.transform;
+            camera.GetComponent<CinemachineFollow>().FollowOffset = new Vector3(0f, 2f, -10f);
         }
 
         /// <summary>
