@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
-public class PlayerShooting : MonoBehaviour
+public class PlayerInteraction : MonoBehaviour
 {
 
     #region FIELDS
@@ -17,16 +17,8 @@ public class PlayerShooting : MonoBehaviour
 
         [Space(20)] [Header("VARIABLES")]
             
-            [Header("Usual Charge")]
-            public GameObject usualChargeProjectile;
-            public int numberOfWaves;
-            public int numberOfProjectilesPerWave;
-            public float delayBetweenWaves;
-            public float shootingCooldown;
-            public bool canShoot;
-            
-            [Header("Super Charge")]
-            public GameObject superChargeProjectile;
+            [Header("Basic Variables")]
+            public int field;
 
     #endregion
 
@@ -51,7 +43,11 @@ public class PlayerShooting : MonoBehaviour
         /// </summary>
         void Start()
         {
-            canShoot = true;
+            // Perform initial setup that occurs when the game starts.
+            // Example: Initialize game state, start coroutines, load resources, etc.
+            
+            // Example of starting a coroutine.
+            // StartCoroutine(ExampleCoroutine());
         }
 
         /// <summary>
@@ -60,11 +56,8 @@ public class PlayerShooting : MonoBehaviour
         /// </summary>
         void Update()
         {
-            if((Input.GetMouseButtonDown(0)) && (canShoot))
-            {
-                StartCoroutine(UsualCharge());
-                StartCoroutine(ShootCooldown());
-            }
+            // Add your per-frame logic here.
+            // Example: Move objects, check user input, update animations, etc.
         }
 
         /// <summary>
@@ -80,45 +73,39 @@ public class PlayerShooting : MonoBehaviour
     #endregion
 
     #region CUSTOM METHODS
-        IEnumerator UsualCharge()
-        {
-            for(int i = 1; i <= numberOfWaves; i++)
-            {
-                for(int j = 1; j <= numberOfProjectilesPerWave; j++)
-                {
-                    float angle = 360f / numberOfProjectilesPerWave;
-    
-                    GameObject projectileInstance = Instantiate(usualChargeProjectile, transform.position, Quaternion.identity);
-                    ProjectileSystem projectileScript = projectileInstance.GetComponent<ProjectileSystem>();
-                    
-                    Vector3 rotationAngle = new Vector3 (0f, 0f, angle * j);
-                    projectileInstance.transform.eulerAngles = transform.eulerAngles + rotationAngle;
-                }
-                
-                yield return new WaitForSeconds(delayBetweenWaves);
-            }
-        }
 
         /// <summary>
         /// An example custom method.
         /// Replace with your own custom logic.
         /// </summary>
-        void SuperCharge()
+        void ExampleMethod()
         {
             // Implement custom functionality here.
             // Example: Execute game-specific behavior or helper logic.
         }
 
         /// <summary>
+        /// Sent when an incoming collider makes contact with this object's
+        /// collider (2D physics only).
+        /// </summary>
+        /// <param name="other">The Collision2D data associated with this collision.</param>
+        void OnTriggerEnter2D(Collider2D obj)
+        {
+            if(obj.gameObject.CompareTag("Trigger"))
+            {
+                obj.gameObject.GetComponent<TriggerSystem>().LowerLights();
+            }
+        }
+
+        /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>
-        IEnumerator ShootCooldown()
+        IEnumerator ExampleCoroutine()
         {
-            canShoot = false;
+            // Wait for 2 seconds before executing further code.
+            yield return new WaitForSeconds(2f);
 
-            yield return new WaitForSeconds(shootingCooldown);
-
-            canShoot = true;
+            Debug.Log("Action after 2 seconds.");
         }
 
     #endregion

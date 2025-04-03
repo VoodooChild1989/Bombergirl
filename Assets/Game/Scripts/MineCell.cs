@@ -7,6 +7,14 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
+public enum OreType
+{
+    None,
+    Coal,
+    Crystal,
+    Gemstone
+}
+
 public class PlatformerCell : MonoBehaviour
 {
 
@@ -20,6 +28,7 @@ public class PlatformerCell : MonoBehaviour
             [Header("Basic Variables")]
             public string cellName;
             public float chance;
+            public OreType curOreType;
             public int health;
             public int posX;
             public int posY;

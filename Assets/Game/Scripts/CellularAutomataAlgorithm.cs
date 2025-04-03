@@ -32,6 +32,11 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             public PlatformerCell[] cells;
             private GameObject[,] _currentGrid;
 
+            [Header("Ores")]
+            public GameObject coalObj;
+            public GameObject crystalObj;
+            public GameObject gemstoneObj;
+
             [Header("Decorations")]
             public GameObject grass;
             public GameObject grass_detail_1;
@@ -211,24 +216,78 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                 for (int j = 0; j < height; j++)
                 {
                     if(_grid[i,j] == 0) continue;
-
-                    int randomIndex = UnityEngine.Random.Range(1, cells.Length);
-                    Vector3 pos = new Vector3(i - (width / 2) + offsetX, j - height + offsetY, 0);
                     
-                    // The first element of a collection needs to be empty (just a block)
-                    if(UnityEngine.Random.value < cells[randomIndex].chance)
+                    Vector3 pos = new Vector3(i - (width / 2) + offsetX, j - height + offsetY, 0);
+
+                    // Cell type
+                    if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)) && (!IsFull(i+1,j)) && (!IsFull(i,j-1)) && (!IsFull(i,j+1)))
                     {
-                        _currentGrid[i,j] = Instantiate(cells[randomIndex].prefab, pos, Quaternion.identity);
+                        _currentGrid[i,j] = Instantiate(cells[1].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j+1)) && (!IsFull(i,j+1)) && (!IsFull(i-1,j)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[2].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j+1)) && (!IsFull(i+1,j)) && (!IsFull(i+1,j+1)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[3].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)) && (!IsFull(i-1,j-1)) && (!IsFull(i,j-1)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[7].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j-1)) && (!IsFull(i+1,j)) && (!IsFull(i+1,j-1)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[8].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j+1)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[4].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[5].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i+1,j)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[6].prefab, pos, Quaternion.identity); 
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j-1)))
+                    {
+                        _currentGrid[i,j] = Instantiate(cells[9].prefab, pos, Quaternion.identity); 
                     }
                     else
                     {
-                        _currentGrid[i,j] = Instantiate(cells[0].prefab, pos, Quaternion.identity);
+                        _currentGrid[i,j] = Instantiate(cells[0].prefab, pos, Quaternion.identity); 
                     }
-                    
+
                     // Saving the position
                     PlatformerCell cellScript = _currentGrid[i,j].GetComponent<PlatformerCell>();
                     cellScript.posX = i;
                     cellScript.posY = j;
+
+                    // Ore type
+                    float initRandomValue = UnityEngine.Random.value;
+                    if(initRandomValue <= 0.3f)
+                    {
+                        float randomValue = UnityEngine.Random.value;
+
+                        if(randomValue <= 0.3f)
+                        {
+                            cellScript.curOreType = OreType.Coal;
+                            AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
+                        }   
+                        else if(randomValue <= 0.5f)
+                        {
+                            cellScript.curOreType = OreType.Crystal;
+                            AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
+                        }
+                        else if(randomValue <= 0.7f)
+                        {
+                            cellScript.curOreType = OreType.Gemstone;
+                            AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
+                        }
+                    }
 
                     // Adding grass
                     if((j < height - 1) && (_grid[i,j+1] == 0))
@@ -272,11 +331,76 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     if((i < 0) || (i >= width) || (j < 0) || (j >= height) || (_currentGrid[i,j] == null)) continue;
 
                     Vector3 pos = new Vector3(i - (width / 2) + offsetX, j - height + offsetY, 0);
+                    SpriteRenderer sr = _currentGrid[i,j].GetComponent<SpriteRenderer>();
+                    
+                    // Cell type
+                    if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)) && (!IsFull(i+1,j)) && (!IsFull(i,j-1)) && (!IsFull(i,j+1)))
+                    {
+                        SpriteRenderer srPrefab = cells[1].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j+1)) && (!IsFull(i,j+1)) && (!IsFull(i-1,j)))
+                    {
+                        SpriteRenderer srPrefab = cells[2].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j+1)) && (!IsFull(i+1,j)) && (!IsFull(i+1,j+1)))
+                    {
+                        SpriteRenderer srPrefab = cells[3].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)) && (!IsFull(i-1,j-1)) && (!IsFull(i,j-1)))
+                    {
+                        SpriteRenderer srPrefab = cells[7].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j-1)) && (!IsFull(i+1,j)) && (!IsFull(i+1,j-1)))
+                    {
+                        SpriteRenderer srPrefab = cells[8].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j+1)))
+                    {
+                        SpriteRenderer srPrefab = cells[4].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)))
+                    {
+                        SpriteRenderer srPrefab = cells[5].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i+1,j)))
+                    {
+                        SpriteRenderer srPrefab = cells[6].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i,j-1)))
+                    {
+                        SpriteRenderer srPrefab = cells[9].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
+                    else
+                    {
+                        SpriteRenderer srPrefab = cells[0].prefab.GetComponent<SpriteRenderer>();
+                        sr.sprite = srPrefab.sprite;
+                    }
 
                     // Adding grass
                     if((j < height - 1) && (_grid[i,j+1] == 0))
                     {
                         AddDecor(_currentGrid[i,j], grass, pos);
+                    
+                        int randomIndexDetail = UnityEngine.Random.Range(1, 4);
+                        Vector3 posDetail = new Vector3(i - (width / 2) + offsetX, j - height + offsetY + 1, 0);
+
+                        if(randomIndexDetail == 1)
+                        {
+                            AddDecor(_currentGrid[i,j], grass_detail_1, posDetail);
+                        }
+                        else if(randomIndexDetail == 2)
+                        {
+                            AddDecor(_currentGrid[i,j], grass_detail_2, posDetail);
+                        }
                     }
                     if((j > 0) && (_grid[i,j-1] == 0))
                     {
@@ -300,6 +424,27 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             decorObj.transform.SetParent(parentObj.transform);
         }
 
+        void AddOre(GameObject parentObj, OreType oreType, Vector3 pos)
+        {
+            GameObject objToSpawn = null;
+
+            if(oreType == OreType.Coal)
+            {
+                objToSpawn = coalObj;
+            }
+            else if(oreType == OreType.Crystal)
+            {
+                objToSpawn = crystalObj;
+            }
+            if(oreType == OreType.Gemstone)
+            {
+                objToSpawn = gemstoneObj;
+            }
+
+            GameObject oreObj = Instantiate(objToSpawn, pos, Quaternion.identity);
+            oreObj.transform.SetParent(parentObj.transform);
+        }
+
         public void RemoveCell(int x, int y, GameObject vfx = null)
         {
             if(vfx != null) 
@@ -310,7 +455,23 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             Destroy(_currentGrid[x, y]);
             _currentGrid[x, y] = null;
             _grid[x, y] = 0;
-            RefreshingMap(x, y);
+            RefreshingMapNeighbours(x, y);
+        }
+
+        void RefreshingMapNeighbours(int x, int y)
+        {
+            for(int i = x - 1; i <= x + 1; i++)
+            {            
+                for(int j = y - 1; j <= y + 1; j++)
+                {   
+                    RefreshingMap(i, j);
+                }
+            }
+        }
+
+        public bool IsFull(int x, int y)
+        {
+            return (_grid[x, y] == 1) ? true : false;
         }
 
         public GameObject GetCell(int x, int y)
