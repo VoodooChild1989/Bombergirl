@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 using Unity.Cinemachine;
+using DG.Tweening;
 
 /// <summary>
 /// A system used to manage dialogues in both default and cutscene modes.
@@ -47,11 +48,7 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Awake()
         {
-            // Initialize variables or cache references here.
-            // Example: Setting up components or data before start is called.
-            
-            // Example of adding a component.
-            // MyGame.Utils.AddComponent<SpriteRenderer>(out spriteRenderer, gameObject, this.GetType().Name);   
+            //
         }
 
         /// <summary>
@@ -113,8 +110,13 @@ public class DialogueSystem : MonoBehaviour
 
             FindObjectOfType<PlayerMovement>().isInDialogue = true;
             characterNameTMP.text = characterName;
-            camera.Follow = transform;
-            camera.GetComponent<CinemachineFollow>().FollowOffset = offset;
+            camera.Follow = transform; 
+            CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
+            DOTween.To(() => followScript.FollowOffset, 
+                    x => followScript.FollowOffset = x, 
+                    offset, 
+                    1f)
+                .SetEase(Ease.InOutQuad);
         }
         
         /// <summary>
@@ -167,8 +169,13 @@ public class DialogueSystem : MonoBehaviour
             
             FindObjectOfType<PlayerMovement>().isInDialogue = false;
             characterNameTMP.text = "";
-            camera.Follow = FindObjectOfType<PlayerMovement>().gameObject.transform;
-            camera.GetComponent<CinemachineFollow>().FollowOffset = new Vector3(0f, 2f, -10f);
+            camera.Follow = FindObjectOfType<PlayerInteraction>().gameObject.transform;
+            CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
+            DOTween.To(() => followScript.FollowOffset, 
+                    x => followScript.FollowOffset = x, 
+                    FindObjectOfType<PlayerInteraction>().cameraOffset, 
+                    1f)
+                .SetEase(Ease.InOutQuad);
         }
 
         /// <summary>

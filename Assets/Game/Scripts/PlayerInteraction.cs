@@ -6,10 +6,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
-using UnityEngine.Rendering.Universal;
+using Unity.Cinemachine;
 using DG.Tweening;
 
-public class LightSystem : MonoBehaviour, ITrigger
+public class PlayerInteraction : MonoBehaviour
 {
 
     #region FIELDS
@@ -20,7 +20,10 @@ public class LightSystem : MonoBehaviour, ITrigger
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public Light2D globalLight;
+            public GameObject interactionObj;
+            public Vector3 cameraOffset;
+            public CinemachineCamera camera;
+            private Tween cameraOffsetTween;
 
     #endregion
 
@@ -45,11 +48,7 @@ public class LightSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            DisableIcon();
         }
 
         /// <summary>
@@ -80,9 +79,45 @@ public class LightSystem : MonoBehaviour, ITrigger
         /// An example custom method.
         /// Replace with your own custom logic.
         /// </summary>
-        public void TriggerAction()
+        public void EnableIcon()
         {
-            DOTween.To(() => globalLight.intensity, x => globalLight.intensity = x, 0.3f, 0.5f);
+            interactionObj.SetActive(true);   
+        }
+
+        public void DisableIcon()
+        {
+            interactionObj.SetActive(false);   
+        }
+
+        public void ChangeCameraOffset(float x, float y)
+        {
+            cameraOffset = new Vector3(x, y, -10f);
+
+            if (cameraOffsetTween != null && cameraOffsetTween.IsActive())
+            {
+                cameraOffsetTween.Kill();
+            }
+
+            CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
+            cameraOffsetTween = DOTween.To(
+                () => followScript.FollowOffset,
+                value => followScript.FollowOffset = value,
+                cameraOffset,
+                0.4f
+            ).SetEase(Ease.Linear);
+        }
+
+        /// <summary>
+        /// Sent when an incoming collider makes contact with this object's
+        /// collider (2D physics only).
+        /// </summary>
+        /// <param name="other">The Collision2D data associated with this collision.</param>
+        void OnTriggerEnter2D(Collider2D obj)
+        {
+            if(obj.gameObject.CompareTag("Trigger"))
+            {
+                obj.gameObject.GetComponent<ITrigger>().TriggerAction();
+            }
         }
 
         /// <summary>

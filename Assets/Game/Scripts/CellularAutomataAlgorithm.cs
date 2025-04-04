@@ -265,6 +265,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     PlatformerCell cellScript = _currentGrid[i,j].GetComponent<PlatformerCell>();
                     cellScript.posX = i;
                     cellScript.posY = j;
+                    _currentGrid[i,j].transform.SetParent(GameObject.Find("Cells (Collection)").transform);
 
                     // Ore type
                     float initRandomValue = UnityEngine.Random.value;

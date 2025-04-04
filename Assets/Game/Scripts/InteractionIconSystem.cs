@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
+using DG.Tweening;
 
-public class PlayerInteraction : MonoBehaviour
+public class InteractionIconSystem : MonoBehaviour
 {
 
     #region FIELDS
@@ -18,7 +19,8 @@ public class PlayerInteraction : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public int field;
+            public float floatStrength = 0.5f;
+            public float floatDuration = 1f;
 
     #endregion
 
@@ -43,11 +45,11 @@ public class PlayerInteraction : MonoBehaviour
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            Vector3 originalPosition = transform.localPosition;
+
+            transform.DOLocalMoveY(originalPosition.y + floatStrength, floatDuration)
+                        .SetEase(Ease.InOutSine)
+                        .SetLoops(-1, LoopType.Yoyo);
         }
 
         /// <summary>
@@ -82,19 +84,6 @@ public class PlayerInteraction : MonoBehaviour
         {
             // Implement custom functionality here.
             // Example: Execute game-specific behavior or helper logic.
-        }
-
-        /// <summary>
-        /// Sent when an incoming collider makes contact with this object's
-        /// collider (2D physics only).
-        /// </summary>
-        /// <param name="other">The Collision2D data associated with this collision.</param>
-        void OnTriggerEnter2D(Collider2D obj)
-        {
-            if(obj.gameObject.CompareTag("Trigger"))
-            {
-                obj.gameObject.GetComponent<ITrigger>().TriggerAction();
-            }
         }
 
         /// <summary>

@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
-public class NPCSystem : MonoBehaviour, ITrigger
+public class SemicolisionSystem : MonoBehaviour
 {
 
     #region FIELDS
@@ -18,7 +18,9 @@ public class NPCSystem : MonoBehaviour, ITrigger
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public int field;
+            public float offsetY;
+            [ShowOnly] public GameObject playerObj;
+            [ShowOnly] public Collider2D edgeCollider;
 
     #endregion
 
@@ -30,11 +32,8 @@ public class NPCSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Awake()
         {
-            // Initialize variables or cache references here.
-            // Example: Setting up components or data before start is called.
-            
-            // Example of adding a component.
-            // MyGame.Utils.AddComponent<SpriteRenderer>(out spriteRenderer, gameObject, this.GetType().Name);   
+            MyGame.Utils.AddComponent<Collider2D>(out edgeCollider, gameObject, this.GetType().Name);   
+            playerObj = FindObjectOfType<PlayerInteraction>().gameObject;
         }
 
         /// <summary>
@@ -56,8 +55,14 @@ public class NPCSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Update()
         {
-            // Add your per-frame logic here.
-            // Example: Move objects, check user input, update animations, etc.
+            if(transform.position.y > playerObj.transform.position.y + offsetY)
+            {
+                edgeCollider.enabled = false;
+            }
+            else
+            {
+                edgeCollider.enabled = true;
+            }
         }
 
         /// <summary>
@@ -78,9 +83,10 @@ public class NPCSystem : MonoBehaviour, ITrigger
         /// An example custom method.
         /// Replace with your own custom logic.
         /// </summary>
-        public void TriggerAction()
+        void ExampleMethod()
         {
-            GetComponent<DialogueSystem>().StartDialogue();
+            // Implement custom functionality here.
+            // Example: Execute game-specific behavior or helper logic.
         }
 
         /// <summary>

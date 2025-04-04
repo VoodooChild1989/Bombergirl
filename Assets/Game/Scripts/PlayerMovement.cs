@@ -7,6 +7,11 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
+public enum PlayerMovementType
+{
+    Default, Flying
+}
+
 public class PlayerMovement : MonoBehaviour
 {
 
@@ -18,6 +23,7 @@ public class PlayerMovement : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Running Settings")]
+            public PlayerMovementType curPlayerMovementType;
             public float moveSpeed = 5f;
             public float originalMoveSpeed;
             public float jumpForce = 10f;
@@ -31,6 +37,7 @@ public class PlayerMovement : MonoBehaviour
             private Rigidbody2D rb;
             private SpriteRenderer sr;
             public bool isInDialogue;
+            private PlayerInteraction interactionScript;
 
             [Header("Jump Settings")]
             public int maxJumps = 2;
@@ -74,6 +81,8 @@ public class PlayerMovement : MonoBehaviour
             
             sr = GetComponent<SpriteRenderer>();
 
+            interactionScript = GetComponent<PlayerInteraction>();
+
             originalMoveSpeed = moveSpeed;
         }
 
@@ -111,18 +120,54 @@ public class PlayerMovement : MonoBehaviour
                 return;
             }
 
-            Ducking();
-            Running();
-            Jumping();
-            Falling();
-            GravitationPull();
+            if(curPlayerMovementType == PlayerMovementType.Default)
+            {
+                Ducking();
+                Running();
+                Jumping();
+                Falling();
+                GravitationPull();
+            }
+            else
+            {
+                FlyingMovement();
+            }
 
+            IsOnFlip();
             lastPosition = transform.position;
         }
 
     #endregion
 
     #region CUSTOM METHODS
+
+        void FlyingMovement()
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalInput * moveSpeed);
+            
+            // Handling animation
+            if (isGrounded)
+            {                   
+                if(rb.linearVelocity.x != 0f)
+                {
+                    animationScript.ChangeAnimationState(RUNNING_ANIMATION);
+                }
+                else
+                {
+                    animationScript.ChangeAnimationState(IDLE_ANIMATION);
+                }
+            }
+            else if(transform.position.y <= lastPosition.y)
+            {
+                animationScript.ChangeAnimationState(FALLING_ANIMATION);
+            }
+            else
+            {
+                animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+            }
+        }
 
         void DefaultState()
         {
@@ -161,6 +206,8 @@ public class PlayerMovement : MonoBehaviour
             {
                 isDucking = true;
                 animationScript.ChangeAnimationState(DUCKING_ANIMATION);  
+                
+                interactionScript.ChangeCameraOffset(interactionScript.cameraOffset.x, 1f);    
             }
             else
             {
@@ -189,8 +236,6 @@ public class PlayerMovement : MonoBehaviour
                     animationScript.ChangeAnimationState(IDLE_ANIMATION);
                 }
             }
-
-            IsOnFlip();
         }
 
         /// <summary>
@@ -283,11 +328,17 @@ public class PlayerMovement : MonoBehaviour
 
                 moveSpeed = originalMoveSpeed;
             }
+            else if(transform.position.y > lastPosition.y)
+            {                
+                interactionScript.ChangeCameraOffset(interactionScript.cameraOffset.x, 4f);
+            }
             else
             {
                 rb.gravityScale = minGravitation;
 
                 moveSpeed = originalMoveSpeed;
+
+                if(!isDucking) interactionScript.ChangeCameraOffset(interactionScript.cameraOffset.x, 3f);
             }
         }
 
@@ -299,10 +350,12 @@ public class PlayerMovement : MonoBehaviour
             if (rb.linearVelocity.x > 0)
             {
                 sr.flipX = false;
+                interactionScript.ChangeCameraOffset(2f, interactionScript.cameraOffset.y);
             }
             else if (rb.linearVelocity.x < 0)
             {
                 sr.flipX = true;
+                interactionScript.ChangeCameraOffset(-2f, interactionScript.cameraOffset.y);
             }
         }
 
@@ -354,6 +407,8 @@ public class PlayerMovement : MonoBehaviour
             // Ground-check visualization
             Gizmos.color = Color.red;
             Gizmos.DrawLine(transform.position, transform.position + Vector3.down * groundCheckDistance);
+            Gizmos.DrawLine(transform.position + new Vector3(-0.4f, 0f, 0f), transform.position + new Vector3(-0.4f, 0f, 0f) + Vector3.down * groundCheckDistance);
+            Gizmos.DrawLine(transform.position + new Vector3(0.4f, 0f, 0f), transform.position + new Vector3(0.4f, 0f, 0f) + Vector3.down * groundCheckDistance);
         }
 
     #endregion

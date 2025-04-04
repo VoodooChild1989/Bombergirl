@@ -103,12 +103,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: 
   cellName: Cell
-  chance: 0.1
   health: 1
-  posX: 0
-  posY: 0
   prefab: {fileID: 1107112142697640275}
   destructionVFX: {fileID: 5606322157152105762, guid: 5dbe6e5ae22e18042a04aec2f4863868, type: 3}
+  curOreType: 0
+  posX: 0
+  posY: 0
 --- !u!61 &-2865796556865934298
 BoxCollider2D:
   m_ObjectHideFlags: 0
