@@ -48,6 +48,7 @@ public class PlayerInteraction : MonoBehaviour
         /// </summary>
         void Start()
         {
+            camera = FindObjectOfType<CinemachineCamera>();
             DisableIcon();
         }
 
