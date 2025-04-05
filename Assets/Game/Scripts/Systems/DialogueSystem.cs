@@ -15,29 +15,39 @@ public class DialogueSystem : MonoBehaviour
     #region FIELDS
 
         [Header("NOTES")] [TextArea(4, 10)]
-        public string notes = "'&' - Play a sound";
+        public string notes = "Start with a name between two '-'.\n& - Play a sound.";
 
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Input")]
-            public string characterName;
             public string[] lines;
             private int _currentIndexLine;
             public AudioClip[] sounds;
             private int _currentIndexSounds;
-            public CinemachineCamera camera;
-            public Vector3 offset;
-            public AudioClip startVFX;
 
-            [Header("Extra")]
+            [Header("Main")]
             public PlayableDirector timeline;
             public GameObject banner;
             public TMP_Text characterNameTMP;
             public TMP_Text TMPtext;
-            public bool isDialogueActive;
-            public bool isLineAnimating;
-            private Coroutine _lineAnimation;
             public float typingSpeed;
+            public AudioClip startVFX;
+            public CinemachineCamera camera;
+            public Vector3 offset;
+            [ShowOnly] public GameObject activeEmoji;
+            [ShowOnly ]public bool isDialogueActive;
+            [ShowOnly] public bool isLineAnimating;
+            private Coroutine _lineAnimation;
+
+            [Header("Emojis")]
+            public Sprite[] emojis;
+            public Vector3 emojisOffset;
+            public float emojisTargetScale;
+
+            [Header("SFXs")]
+            public AudioClip typingSFX;
+            public float sfxVolume;
+            [ShowOnly] public GameObject activeSource;
 
     #endregion
 
@@ -73,6 +83,7 @@ public class DialogueSystem : MonoBehaviour
                 {
                     isLineAnimating = false;
                     StopCoroutine(_lineAnimation);
+                    Destroy(activeSource);
                     SetClearLine();
                 }
                 else
@@ -110,7 +121,8 @@ public class DialogueSystem : MonoBehaviour
             _lineAnimation = StartCoroutine(LineAnimation(lines[_currentIndexLine]));
 
             FindObjectOfType<PlayerMovement>().isInDialogue = true;
-            characterNameTMP.text = characterName;
+            characterNameTMP.text = GetName(lines[_currentIndexLine]);
+            ActivateEmoji(GetEmoji(lines[_currentIndexLine]));
             camera.Follow = transform; 
             CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
             DOTween.To(() => followScript.FollowOffset, 
@@ -138,6 +150,9 @@ public class DialogueSystem : MonoBehaviour
             {
                 _lineAnimation = StartCoroutine(LineAnimation(lines[_currentIndexLine]));
             }        
+            
+            DeactivateEmoji();
+            characterNameTMP.text = GetName(lines[_currentIndexLine]);
         }
 
         /// <summary>
@@ -146,14 +161,22 @@ public class DialogueSystem : MonoBehaviour
         void SetClearLine()
         {
             TMPtext.text = "";
+            int counter = 0;
 
             for(int i = 0; i < lines[_currentIndexLine].Length; i++)
             {
                 char character = lines[_currentIndexLine][i];
 
-                if(character != '&')
+                if((character == '-') && (counter < 3))
                 {
-                    TMPtext.text += character;
+                    counter++;
+                }
+                else if(counter == 3)
+                {
+                    if(character != '&')
+                    {
+                        TMPtext.text += character;
+                    }
                 }
             }
         }
@@ -189,27 +212,148 @@ public class DialogueSystem : MonoBehaviour
         {
             TMPtext.text = "";
             isLineAnimating = true;
+            int counter = 0;
+            int numberOfSymbols = 0;
+
+            // SFX
+            AudioSource tempSource = new GameObject("Temporary Audio Source (Dialogue)").AddComponent<AudioSource>();
+            if(SFXManager.instance.audioMixerGroup != null) tempSource.outputAudioMixerGroup = SFXManager.instance.audioMixerGroup;
+            tempSource.clip = typingSFX;
+            tempSource.volume = Mathf.Clamp01(sfxVolume);
+            tempSource.loop = true;
+            tempSource.Play();
+            Object.Destroy(tempSource.gameObject, NumberOfSymbols(lines[_currentIndexLine]) * typingSpeed);
+            activeSource = tempSource.gameObject;
+
+            for(int i = 0; i < line.Length; i++)
+            {
+                char character = line[i];
+                
+                if((character == '-') && (counter < 3))
+                {
+                    counter++;
+                }
+                else if(counter == 3)
+                {
+                    if(character == '&')
+                    {
+                        if(_currentIndexSounds != sounds.Length - 1)
+                        {
+                            SFXManager.PlaySFX(sounds[_currentIndexSounds], transform, 1f);
+                            _currentIndexSounds++;
+                        }
+                        
+                        continue;
+                    }
+
+                    TMPtext.text += character;
+                    yield return new WaitForSeconds(typingSpeed);
+                }
+            }
+            
+            isLineAnimating = false;
+        }
+
+        string GetName(string line)
+        {
+            string name = "";
+            int counter = 0;
 
             for(int i = 0; i < line.Length; i++)
             {
                 char character = line[i];
 
-                if(character == '&')
+                if(character == '-')
                 {
-                    if(_currentIndexSounds != sounds.Length - 1)
-                    {
-                        SFXManager.PlaySFX(sounds[_currentIndexSounds], transform, 1f);
-                        _currentIndexSounds++;
-                    }
-                    
-                    continue;
-                }
+                    counter++;
 
-                TMPtext.text += character;
-                yield return new WaitForSeconds(typingSpeed);
+                    if(counter == 2) return name;
+                }
+                else
+                {
+                    name += character;
+                }
             }
-            
-            isLineAnimating = false;
+
+            return "ABC";
+        }
+
+        int GetEmoji(string line)
+        {
+            string name = "";
+            int counter = 0;
+
+            for(int i = 0; i < line.Length; i++)
+            {
+                char character = line[i];
+
+                if(character == '-')
+                {
+                    counter++;
+                }
+                else if(counter == 2)
+                {
+                    return character - '0';
+                }
+            }
+
+            return 0;
+        }
+
+        int NumberOfSymbols(string line)
+        {
+            int counter = 0;
+            int trueCounter = 0;
+
+            for(int i = 0; i < line.Length; i++)
+            {
+                char character = line[i];
+                
+                if((character == '-') && (counter < 3))
+                {
+                    counter++;
+                }
+                else if(counter == 3)
+                {
+                    if(character != '&') trueCounter++;
+                }
+            }   
+
+            return trueCounter;
+        }
+
+        void ActivateEmoji(int index)
+        {     
+            GameObject emojiObj = new GameObject("Emoji");
+            activeEmoji = emojiObj;
+            emojiObj.transform.position = transform.position + emojisOffset;
+            emojiObj.transform.localScale = Vector3.one * 0.1f;
+
+            SpriteRenderer sr = emojiObj.AddComponent<SpriteRenderer>();
+            sr.sprite = emojis[index];
+            sr.sortingLayerName = "VFX";
+            sr.color = new Color(1f, 1f, 1f, 0f);
+
+            emojiObj.transform.DOScale(emojisTargetScale, 0.4f).SetEase(Ease.OutBack);
+            sr.DOFade(1f, 0.4f);
+        }
+        
+        void DeactivateEmoji()
+        {
+            if (activeEmoji == null) return;
+
+            SpriteRenderer sr = activeEmoji.GetComponent<SpriteRenderer>();
+            if (sr == null) return;
+
+            // Scale down and fade out
+            Sequence hideSequence = DOTween.Sequence();
+            hideSequence.Append(activeEmoji.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack));
+            hideSequence.Join(sr.DOFade(0f, 0.3f));
+            hideSequence.OnComplete(() => 
+            {
+                activeEmoji.SetActive(false);
+                ActivateEmoji(GetEmoji(lines[_currentIndexLine]));
+            });
         }
 
     #endregion

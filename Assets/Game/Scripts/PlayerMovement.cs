@@ -106,6 +106,7 @@ public class PlayerMovement : MonoBehaviour
         void Update()
         {
             IsOnGround();
+            IsOnFlip();
         }
 
         /// <summary>
@@ -134,7 +135,6 @@ public class PlayerMovement : MonoBehaviour
                 Ducking();
             }
 
-            IsOnFlip();
             lastPosition = transform.position;
         }
 
@@ -356,12 +356,14 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void IsOnFlip()
         {
-            if (rb.linearVelocity.x > 0)
+            float moveInput = Input.GetAxis("Horizontal");
+
+            if (moveInput > 0f)
             {
                 sr.flipX = false;
                 interactionScript.ChangeCameraOffset(2f, interactionScript.cameraOffset.y);
             }
-            else if (rb.linearVelocity.x < 0)
+            else if (moveInput < 0f)
             {
                 sr.flipX = true;
                 interactionScript.ChangeCameraOffset(-2f, interactionScript.cameraOffset.y);
