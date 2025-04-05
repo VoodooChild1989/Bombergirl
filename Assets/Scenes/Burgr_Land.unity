@@ -406,7 +406,7 @@ MonoBehaviour:
   typingSpeed: 0.03
   startVFX: {fileID: 8300000, guid: 09772df3dc1f7d34fb710577be0d1bed, type: 3}
   camera: {fileID: 2009702456}
-  offset: {x: 0, y: -2, z: -10}
+  offset: {x: 0, y: -1, z: -10}
   activeEmoji: {fileID: 0}
   isDialogueActive: 0
   isLineAnimating: 0
@@ -858,19 +858,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: 2.3897338
+      value: 1.1471229
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 15.202434
+      value: 6.992383
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: -13.959891
+      value: -13.852299
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: 14.79957
+      value: 7.044817
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
@@ -890,11 +890,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
-      value: 13.959934
+      value: 14.133146
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
-      value: 14.705395
+      value: 6.9499226
       objectReference: {fileID: 0}
     - target: {fileID: 5144989448792335275, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_AnchorMax.x

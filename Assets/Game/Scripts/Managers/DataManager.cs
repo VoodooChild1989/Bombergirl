@@ -18,10 +18,7 @@ public class DataManager : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public int emptyCell;
-            public int ironCell;
-            public int metalCell;
-            public int goldCell;
+            public int coins;
             public Vector3 mainScenePos;
             public static DataManager instance;
 

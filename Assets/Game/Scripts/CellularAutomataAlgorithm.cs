@@ -306,16 +306,19 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                         if(randomValue <= 0.3f)
                         {
                             cellScript.curOreType = OreType.Coal;
+                            cellScript.cellName = "Coal";
                             AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
                         }   
                         else if(randomValue <= 0.5f)
                         {
                             cellScript.curOreType = OreType.Crystal;
+                            cellScript.cellName = "Crystal";
                             AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
                         }
                         else if(randomValue <= 0.7f)
                         {
                             cellScript.curOreType = OreType.Gemstone;
+                            cellScript.cellName = "Gemstone";
                             AddOre(_currentGrid[i,j], cellScript.curOreType, pos);
                         }
                     }
