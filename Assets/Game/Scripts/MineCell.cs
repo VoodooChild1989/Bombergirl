@@ -62,7 +62,7 @@ public class PlatformerCell : MonoBehaviour
                 DataManager.instance.goldCell++;
             }      
 
-            CellularAutomataAlgorithm.instance.RemoveCell(posX, posY, destructionVFX);
+            FindObjectOfType<CellularAutomataAlgorithm>().RemoveCell(posX, posY, destructionVFX);
         }
 
     #endregion

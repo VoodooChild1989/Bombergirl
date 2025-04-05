@@ -28,35 +28,37 @@ public class PlayerMovement : MonoBehaviour
             public float originalMoveSpeed;
             public float jumpForce = 10f;
             public float downwardJumpForce = 10f;
-            public bool isDownwardJumping;
-            public bool isDucking;
-            public bool isFalling;
             public float minGravitation;
             public float maxGravitation;
-            private Vector3 lastPosition;
-            private Rigidbody2D rb;
+            [ShowOnly] public bool isDownwardJumping;
+            [ShowOnly] public bool isDucking;
+            [ShowOnly] public bool isFalling;
+            [ShowOnly]public Vector3 lastPosition;
+            [ShowOnly] public Rigidbody2D rb;
             [ShowOnly] public SpriteRenderer sr;
-            public bool isInDialogue;
-            private PlayerInteraction interactionScript;
+            [ShowOnly] public bool isInDialogue;
+            [ShowOnly] public PlayerInteraction interactionScript;
 
-            [Header("Jump Settings")]
+        [Space(20)] [Header("JUMP SETTINGS")]
+
+            [Header("Basic Variables")]
             public int maxJumps = 2;
-            private int jumpCount;
+            [ShowOnly] public int jumpCount;
 
             [Header("Coyote Time Settings")]
             public float coyoteTime = 0.15f;
-            private float coyoteTimeCounter; 
+            [ShowOnly] public float coyoteTimeCounter; 
 
             [Header("Jump Buffer Settings")]
             public float jumpBufferTime = 0.15f;
-            private float jumpBufferCounter; 
+            [ShowOnly] public float jumpBufferCounter; 
 
             [Header("Ground Check Settings")]
             public LayerMask groundLayer;
             public float groundCheckDistance = 0.2f;
             public bool isGrounded;
             
-        [Space(20)] [Header("VARIABLES")]
+        [Space(20)] [Header("ANIMATION")]
 
             [Header("Animation Names")]   
             public AnimationSystem animationScript;
@@ -105,6 +107,8 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void Update()
         {
+            if(isInDialogue) return;
+            
             IsOnGround();
             IsOnFlip();
         }
@@ -142,37 +146,9 @@ public class PlayerMovement : MonoBehaviour
 
     #region CUSTOM METHODS
 
-        void FlyingMovement()
-        {
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalInput * moveSpeed);
-            
-            // Handling animation
-            if(!isDucking)
-            {
-                if (isGrounded)
-                {                   
-                    if(rb.linearVelocity.x != 0f)
-                    {
-                        animationScript.ChangeAnimationState(RUNNING_ANIMATION);
-                    }
-                    else
-                    {
-                        animationScript.ChangeAnimationState(IDLE_ANIMATION);
-                    }
-                }
-                else if(transform.position.y <= lastPosition.y)
-                {
-                    animationScript.ChangeAnimationState(FALLING_ANIMATION);
-                }
-                else if(transform.position.y > lastPosition.y)
-                {
-                    animationScript.ChangeAnimationState(JUMPING_ANIMATION);
-                }
-            }
-        }
-
+        /// <summary>
+        /// The state of idle talking.
+        /// </summary>
         void DefaultState()
         {
             rb.linearVelocity = new Vector2(0f, 0f);
@@ -181,25 +157,8 @@ public class PlayerMovement : MonoBehaviour
         }
 
         /// <summary>
-        /// Checking if the player touches ground.
+        /// Ducking/crouching system.
         /// </summary>
-        void IsOnGround()
-        {
-            isGrounded = (Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer)) ||
-                        (Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0f, 0f), Vector2.down + new Vector2(-0.4f, 0f), groundCheckDistance, groundLayer)) ||
-                        (Physics2D.Raycast(transform.position + new Vector3(0.4f, 0f, 0f), Vector2.down + new Vector2(0.4f, 0f), groundCheckDistance, groundLayer)) ;
-            
-            if (isGrounded)
-            {
-                coyoteTimeCounter = coyoteTime;
-                jumpCount = 0;
-            }
-            else
-            {
-                coyoteTimeCounter -= Time.deltaTime;
-            }
-        }
-
         void Ducking()
         {
             if((Input.GetKeyDown(KeyCode.S)) && (isGrounded))
@@ -293,6 +252,9 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Falling logic.
+        /// </summary>
         void Falling()
         {
             if((transform.position.y < lastPosition.y) && (!isGrounded) && (!isDownwardJumping))
@@ -320,15 +282,6 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void GravitationPull()
         {
-            // Reseting speed in max high
-            /*if ((rb.linearVelocity.y > 0f) && (rb.linearVelocity.y < 0.5f))
-            {
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-                rb.gravityScale = 0.5f;
-                moveSpeed = originalMoveSpeed * 1.3f;
-            }
-            else */
-            
             if(transform.position.y < lastPosition.y)
             {
                 rb.gravityScale += 0.1f;
@@ -352,6 +305,60 @@ public class PlayerMovement : MonoBehaviour
         }
 
         /// <summary>
+        /// Flying-based movement.
+        /// </summary>
+        void FlyingMovement()
+        {
+            float horizontalInput = Input.GetAxis("Horizontal");
+            float verticalInput = Input.GetAxis("Vertical");
+            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalInput * moveSpeed);
+            
+            // Handling animation
+            if(!isDucking)
+            {
+                if (isGrounded)
+                {                   
+                    if(rb.linearVelocity.x != 0f)
+                    {
+                        animationScript.ChangeAnimationState(RUNNING_ANIMATION);
+                    }
+                    else
+                    {
+                        animationScript.ChangeAnimationState(IDLE_ANIMATION);
+                    }
+                }
+                else if(transform.position.y <= lastPosition.y)
+                {
+                    animationScript.ChangeAnimationState(FALLING_ANIMATION);
+                }
+                else if(transform.position.y > lastPosition.y)
+                {
+                    animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+                }
+            }
+        }
+
+        /// <summary>
+        /// Checking if the player touches ground.
+        /// </summary>
+        void IsOnGround()
+        {
+            isGrounded = (Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer)) ||
+                        (Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0f, 0f), Vector2.down + new Vector2(-0.4f, 0f), groundCheckDistance, groundLayer)) ||
+                        (Physics2D.Raycast(transform.position + new Vector3(0.4f, 0f, 0f), Vector2.down + new Vector2(0.4f, 0f), groundCheckDistance, groundLayer)) ;
+            
+            if (isGrounded)
+            {
+                coyoteTimeCounter = coyoteTime;
+                jumpCount = 0;
+            }
+            else
+            {
+                coyoteTimeCounter -= Time.deltaTime;
+            }
+        }
+
+        /// <summary>
         /// Flipping the sprite according to direction.
         /// </summary>
         void IsOnFlip()
@@ -370,14 +377,20 @@ public class PlayerMovement : MonoBehaviour
             }
         }
 
+        /// <summary>
+        /// Sent when an incoming collider makes contact with this object's
+        /// collider (2D physics only).
+        /// </summary>
+        /// <param name="obj">The Collision2D data associated with this collision.</param>
         void OnCollisionEnter2D(Collision2D obj) 
         {
             if((obj.gameObject.CompareTag("Cell")) && (isDownwardJumping))
             {
                 PlatformerCell cellScriptMid = obj.gameObject.GetComponent<PlatformerCell>();
 
-                GameObject cellLeft = CellularAutomataAlgorithm.instance.GetCell(cellScriptMid.posX - 1, cellScriptMid.posY);
-                GameObject cellRight = CellularAutomataAlgorithm.instance.GetCell(cellScriptMid.posX + 1, cellScriptMid.posY);
+                CellularAutomataAlgorithm CAScript = FindObjectOfType<CellularAutomataAlgorithm>();
+                GameObject cellLeft = CAScript.GetCell(cellScriptMid.posX - 1, cellScriptMid.posY);
+                GameObject cellRight = CAScript.GetCell(cellScriptMid.posX + 1, cellScriptMid.posY);
 
                 if(cellLeft != null)
                 {
@@ -397,17 +410,6 @@ public class PlayerMovement : MonoBehaviour
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
                 transform.position += new Vector3(0f, -1f, 0f);
             }
-        }
-
-        /// <summary>
-        /// An example coroutine that waits for 2 seconds.
-        /// </summary>
-        IEnumerator ExampleCoroutine()
-        {
-            // Wait for 2 seconds before executing further code.
-            yield return new WaitForSeconds(2f);
-
-            Debug.Log("Action after 2 seconds.");
         }
         
         /// <summary>

@@ -24,7 +24,6 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             public int numberOfSmoothings = 5;
             public int seed = 1;
             public bool useRandomSeed = false;
-            public static CellularAutomataAlgorithm instance;
 
             [Header("Extra")]
             public float offsetX = 0.5f;
@@ -63,7 +62,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         /// </summary>
         void Awake()
         {
-            SingletonUtility.MakeSingleton(ref instance, this);
+            //
         }
 
         /// <summary>

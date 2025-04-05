@@ -22,7 +22,7 @@ public class PlayerInteraction : MonoBehaviour
             [Header("Basic Variables")]
             public GameObject interactionObj;
             public Vector3 cameraOffset;
-            public CinemachineCamera camera;
+            [ShowOnly] public CinemachineCamera camera;
             private Tween cameraOffsetTween;
 
     #endregion

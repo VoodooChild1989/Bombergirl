@@ -213,7 +213,6 @@ public class DialogueSystem : MonoBehaviour
             TMPtext.text = "";
             isLineAnimating = true;
             int counter = 0;
-            int numberOfSymbols = 0;
 
             // SFX
             AudioSource tempSource = new GameObject("Temporary Audio Source (Dialogue)").AddComponent<AudioSource>();
@@ -280,7 +279,6 @@ public class DialogueSystem : MonoBehaviour
 
         int GetEmoji(string line)
         {
-            string name = "";
             int counter = 0;
 
             for(int i = 0; i < line.Length; i++)
