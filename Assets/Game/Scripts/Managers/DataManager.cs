@@ -22,6 +22,7 @@ public class DataManager : MonoBehaviour
             public int ironCell;
             public int metalCell;
             public int goldCell;
+            public Vector3 mainScenePos;
             public static DataManager instance;
 
     #endregion

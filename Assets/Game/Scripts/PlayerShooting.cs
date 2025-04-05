@@ -7,6 +7,11 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
+public enum ShootingType
+{
+    Straight, Round
+}
+
 public class PlayerShooting : MonoBehaviour
 {
 
@@ -19,6 +24,7 @@ public class PlayerShooting : MonoBehaviour
             
             [Header("Usual Charge")]
             public GameObject usualChargeProjectile;
+            public ShootingType curShootingType;
             public int numberOfWaves;
             public int numberOfProjectilesPerWave;
             public float delayBetweenWaves;
@@ -86,13 +92,33 @@ public class PlayerShooting : MonoBehaviour
             {
                 for(int j = 1; j <= numberOfProjectilesPerWave; j++)
                 {
-                    float angle = 360f / numberOfProjectilesPerWave;
-    
-                    GameObject projectileInstance = Instantiate(usualChargeProjectile, transform.position, Quaternion.identity);
-                    ProjectileSystem projectileScript = projectileInstance.GetComponent<ProjectileSystem>();
-                    
-                    Vector3 rotationAngle = new Vector3 (0f, 0f, angle * j);
-                    projectileInstance.transform.eulerAngles = transform.eulerAngles + rotationAngle;
+                    if(curShootingType == ShootingType.Straight)
+                    {
+                        GameObject projectileInstance = Instantiate(usualChargeProjectile, transform.position, Quaternion.identity);
+                        ProjectileSystem projectileScript = projectileInstance.GetComponent<ProjectileSystem>();
+
+                        PlayerMovement movementScript = GetComponent<PlayerMovement>();
+                        if(movementScript.sr.flipX)
+                        {
+                            projectileScript.movementDirection = new Vector3(-1f, 0f, 0f);
+                        }
+                        else
+                        {
+                            projectileScript.movementDirection = new Vector3(1f, 0f, 0f);
+                        }
+        
+                        yield return new WaitForSeconds(0.1f);
+                    }
+                    else if(curShootingType == ShootingType.Round)
+                    {
+                        float angle = 360f / numberOfProjectilesPerWave;
+        
+                        GameObject projectileInstance = Instantiate(usualChargeProjectile, transform.position, Quaternion.identity);
+                        ProjectileSystem projectileScript = projectileInstance.GetComponent<ProjectileSystem>();
+                        
+                        Vector3 rotationAngle = new Vector3 (0f, 0f, angle * j);
+                        projectileInstance.transform.eulerAngles = transform.eulerAngles + rotationAngle;
+                    }
                 }
                 
                 yield return new WaitForSeconds(delayBetweenWaves);

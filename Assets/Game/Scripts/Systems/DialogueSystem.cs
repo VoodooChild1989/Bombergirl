@@ -27,6 +27,7 @@ public class DialogueSystem : MonoBehaviour
             private int _currentIndexSounds;
             public CinemachineCamera camera;
             public Vector3 offset;
+            public AudioClip startVFX;
 
             [Header("Extra")]
             public PlayableDirector timeline;
@@ -117,6 +118,8 @@ public class DialogueSystem : MonoBehaviour
                     offset, 
                     1f)
                 .SetEase(Ease.InOutQuad);
+                
+            SFXManager.PlaySFX(startVFX, transform, 1f);
         }
         
         /// <summary>

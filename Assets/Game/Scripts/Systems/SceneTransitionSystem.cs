@@ -43,12 +43,9 @@ public class SceneTransitionSystem : MonoBehaviour
         /// Useful for initialization once the game starts.
         /// </summary>
         void Start()
-        {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+        {         
+            if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (DataManager.instance.mainScenePos != Vector3.zero))
+                FindObjectOfType<PlayerInteraction>().gameObject.transform.position = DataManager.instance.mainScenePos;   
         }
 
         /// <summary>
@@ -85,6 +82,8 @@ public class SceneTransitionSystem : MonoBehaviour
         /// </summary>
         IEnumerator SceneTransition(string sceneName)
         {
+            if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base")
+                DataManager.instance.mainScenePos = FindObjectOfType<PlayerInteraction>().gameObject.transform.position;
             transition.gameObject.SetActive(true);
             transition.SetTrigger("Start");
 

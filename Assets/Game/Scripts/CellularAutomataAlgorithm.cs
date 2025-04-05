@@ -45,8 +45,13 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             public GameObject edge_right;
             public GameObject edge_bottom;
 
+            [Header("Enemies")]
+            public GameObject groundEnemy;
+            public GameObject airEnemy;
+
             [Header("Camera Shake")]
             public CinemachineImpulseSource impulseSource;
+            public AudioClip destructionSFX;
 
     #endregion
 
@@ -215,9 +220,32 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             {
                 for (int j = 0; j < height; j++)
                 {
-                    if(_grid[i,j] == 0) continue;
-                    
                     Vector3 pos = new Vector3(i - (width / 2) + offsetX, j - height + offsetY, 0);
+
+                    if(_grid[i,j] == 0) 
+                    {
+                        // Adding enemies
+                        if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2))
+                        {
+                            // Ground enemies
+                            if((!IsFull(i-1,j)) && (!IsFull(i,j)) && (!IsFull(i+1,j)) && (IsFull(i-1,j-1)) && (IsFull(i,j-1)) && (IsFull(i+1,j-1)))
+                            {
+                                if(IsValue(0.3f)) 
+                                {
+                                    GameObject enemyInstance = Instantiate(groundEnemy, pos, Quaternion.identity);
+                                }
+                            }
+                            else if(CountingFullNeighbours(i, j) == 0)
+                            {   
+                                if(IsValue(0.01f)) 
+                                {
+                                    GameObject enemyInstance = Instantiate(airEnemy, pos, Quaternion.identity);
+                                }
+                            }
+                        }
+
+                        continue;
+                    }
 
                     // Cell type
                     if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2) && (!IsFull(i-1,j)) && (!IsFull(i+1,j)) && (!IsFull(i,j-1)) && (!IsFull(i,j+1)))
@@ -266,6 +294,9 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     cellScript.posX = i;
                     cellScript.posY = j;
                     _currentGrid[i,j].transform.SetParent(GameObject.Find("Cells (Collection)").transform);
+
+                    // Health
+                    cellScript.health = (height - j) / 10 + 1;
 
                     // Ore type
                     float initRandomValue = UnityEngine.Random.value;
@@ -318,7 +349,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     if((i > 0) && (_grid[i-1,j] == 0))
                     {
                         AddDecor(_currentGrid[i,j], edge_left, pos);
-                    }       
+                    }
                 }
             }
         }
@@ -391,7 +422,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     {
                         AddDecor(_currentGrid[i,j], grass, pos);
                     
-                        int randomIndexDetail = UnityEngine.Random.Range(1, 4);
+                        int randomIndexDetail = UnityEngine.Random.Range(1, 8);
                         Vector3 posDetail = new Vector3(i - (width / 2) + offsetX, j - height + offsetY + 1, 0);
 
                         if(randomIndexDetail == 1)
@@ -454,6 +485,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                 impulseSource.GenerateImpulse();
             }
             Destroy(_currentGrid[x, y]);
+            SFXManager.PlaySFX(destructionSFX, transform, 0.3f);
             _currentGrid[x, y] = null;
             _grid[x, y] = 0;
             RefreshingMapNeighbours(x, y);
@@ -478,6 +510,11 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         public GameObject GetCell(int x, int y)
         {
             return _currentGrid[x, y];
+        }
+
+        bool IsValue(float value)
+        {
+            return UnityEngine.Random.value < value ? true : false;
         }
 
         /*

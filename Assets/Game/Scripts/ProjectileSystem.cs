@@ -46,12 +46,9 @@ public class ProjectileSystem : MonoBehaviour
             
             [Header("Basic Variables")]  
             public ProjectileOwner currentProjectileOwner = ProjectileOwner.Enemy;
-            public Vector3 movementDirection = new Vector3(0f, 1f, 0f);
+            public Vector3 movementDirection = new Vector3(1f, 0f, 0f);
             public float defaultSpeed = 3f;
-            public int initDamageAmount = 2;
-            private int leftDamageAmount;
-            public int maxBlocksToDestroy = 1;
-            private int curBlocksToDestroy = 0;
+            public int damageAmount = 1;
             public float destroyObjIn = 10f;
             public AudioClip shootingSFX;
             public GameObject shootingVFX;
@@ -111,8 +108,8 @@ public class ProjectileSystem : MonoBehaviour
             [Tooltip("The sequence of sprites of the projectile.")]
             public Sprite[] idleSprites;
             [Tooltip("The length of a single frame.")]
-            public float animationSpriteLength;
-            public SpriteRenderer spriteRenderer;
+            public float frameDuration;
+            [ShowOnly] public SpriteRenderer sr;
             public Coroutine animationCoroutine;
 
     #endregion
@@ -125,7 +122,7 @@ public class ProjectileSystem : MonoBehaviour
         /// </summary>
         void Awake()
         {
-            leftDamageAmount = initDamageAmount;
+            sr = GetComponent<SpriteRenderer>();
         }
 
         /// <summary>
@@ -134,6 +131,7 @@ public class ProjectileSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
+            StartCoroutine(ProjectileAnimation());
             SetState();
         }
 
@@ -353,30 +351,44 @@ public class ProjectileSystem : MonoBehaviour
         {
             Instantiate(shootingVFX, transform.position, Quaternion.identity);
 
-            if(obj.gameObject.CompareTag("Cell"))
+            if(currentProjectileOwner == ProjectileOwner.Player)
             {
-                PlatformerCell cellScript = obj.gameObject.GetComponent<PlatformerCell>();
-
-                if(cellScript.health >= leftDamageAmount)
+                if(obj.gameObject.CompareTag("Cell"))
                 {
-                    cellScript.DamageCell(leftDamageAmount);
-
-                    Destroy(gameObject);
+                    PlatformerCell cellScript = obj.gameObject.GetComponent<PlatformerCell>();
+                    cellScript.DamageCell(damageAmount);
                 }
-                else
+                if(obj.gameObject.CompareTag("Enemy"))
                 {
-                    cellScript.DamageCell(leftDamageAmount);
-
-                    leftDamageAmount -= cellScript.health;
-                    if(leftDamageAmount <= 0) Destroy(gameObject);
-
-                    curBlocksToDestroy++;
-                    if(curBlocksToDestroy >= maxBlocksToDestroy) Destroy(gameObject); 
+                    IDamagable interfaceScript = obj.gameObject.GetComponent<IDamagable>();
+                    if(interfaceScript != null) interfaceScript.TakeDamage(damageAmount);
                 }
             }
-            
+            else
+            {   
+                if(obj.gameObject.CompareTag("Player"))
+                {
+                    IDamagable interfaceScript = obj.gameObject.GetComponent<IDamagable>();
+                    if(interfaceScript != null) interfaceScript.TakeDamage(damageAmount);
+                }
+            }
+
             Destroy(gameObject);
         }
+
+        IEnumerator ProjectileAnimation()
+        {
+            while(true)
+            {
+                foreach(Sprite sprite in idleSprites)
+                {
+                    sr.sprite = sprite;
+
+                    yield return new WaitForSeconds(frameDuration);
+                }
+            }
+        }
+
     #endregion
 
 }

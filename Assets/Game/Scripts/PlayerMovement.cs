@@ -35,7 +35,7 @@ public class PlayerMovement : MonoBehaviour
             public float maxGravitation;
             private Vector3 lastPosition;
             private Rigidbody2D rb;
-            private SpriteRenderer sr;
+            [ShowOnly] public SpriteRenderer sr;
             public bool isInDialogue;
             private PlayerInteraction interactionScript;
 
@@ -131,6 +131,7 @@ public class PlayerMovement : MonoBehaviour
             else
             {
                 FlyingMovement();
+                Ducking();
             }
 
             IsOnFlip();
@@ -148,24 +149,27 @@ public class PlayerMovement : MonoBehaviour
             rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalInput * moveSpeed);
             
             // Handling animation
-            if (isGrounded)
-            {                   
-                if(rb.linearVelocity.x != 0f)
-                {
-                    animationScript.ChangeAnimationState(RUNNING_ANIMATION);
-                }
-                else
-                {
-                    animationScript.ChangeAnimationState(IDLE_ANIMATION);
-                }
-            }
-            else if(transform.position.y <= lastPosition.y)
+            if(!isDucking)
             {
-                animationScript.ChangeAnimationState(FALLING_ANIMATION);
-            }
-            else
-            {
-                animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+                if (isGrounded)
+                {                   
+                    if(rb.linearVelocity.x != 0f)
+                    {
+                        animationScript.ChangeAnimationState(RUNNING_ANIMATION);
+                    }
+                    else
+                    {
+                        animationScript.ChangeAnimationState(IDLE_ANIMATION);
+                    }
+                }
+                else if(transform.position.y <= lastPosition.y)
+                {
+                    animationScript.ChangeAnimationState(FALLING_ANIMATION);
+                }
+                else if(transform.position.y > lastPosition.y)
+                {
+                    animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+                }
             }
         }
 
@@ -181,7 +185,9 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void IsOnGround()
         {
-            isGrounded = Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer);
+            isGrounded = (Physics2D.Raycast(transform.position, Vector2.down, groundCheckDistance, groundLayer)) ||
+                        (Physics2D.Raycast(transform.position + new Vector3(-0.4f, 0f, 0f), Vector2.down + new Vector2(-0.4f, 0f), groundCheckDistance, groundLayer)) ||
+                        (Physics2D.Raycast(transform.position + new Vector3(0.4f, 0f, 0f), Vector2.down + new Vector2(0.4f, 0f), groundCheckDistance, groundLayer)) ;
             
             if (isGrounded)
             {
@@ -259,7 +265,8 @@ public class PlayerMovement : MonoBehaviour
                 jumpCount++;
 
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-                rb.linearVelocity += Vector2.up * jumpForce;
+                //rb.linearVelocity += Vector2.up * jumpForce;
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                 
                 coyoteTimeCounter = 0f;
                 jumpBufferCounter = 0f;
@@ -314,13 +321,15 @@ public class PlayerMovement : MonoBehaviour
         void GravitationPull()
         {
             // Reseting speed in max high
-            if ((rb.linearVelocity.y > 0f) && (rb.linearVelocity.y < 0.5f))
+            /*if ((rb.linearVelocity.y > 0f) && (rb.linearVelocity.y < 0.5f))
             {
                 rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
                 rb.gravityScale = 0.5f;
                 moveSpeed = originalMoveSpeed * 1.3f;
             }
-            else if(transform.position.y < lastPosition.y)
+            else */
+            
+            if(transform.position.y < lastPosition.y)
             {
                 rb.gravityScale += 0.1f;
                                 

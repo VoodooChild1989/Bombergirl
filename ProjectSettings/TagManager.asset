@@ -7,6 +7,7 @@ TagManager:
   - Cell
   - Player_Character
   - Trigger
+  - Enemy
   layers:
   - Default
   - TransparentFX
