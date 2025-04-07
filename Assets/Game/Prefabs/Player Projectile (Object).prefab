@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 7929733892105462186}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 10.776093, y: -9.272444, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1.2, y: 1.2, z: 1.2}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 0}
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 663363867
   m_SortingLayer: 3
   m_SortingOrder: 1
-  m_Sprite: {fileID: 6780163795253843707, guid: dca555df739a5a74eadb300411e706e0, type: 3}
+  m_Sprite: {fileID: 6711257252158638106, guid: 4ceab1e3cabea9f4cb72edf24eef4625, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -123,16 +123,9 @@ MonoBehaviour:
   startScale: 2
   finalScale: 5
   idleSprites:
-  - {fileID: 6780163795253843707, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: -4486065727169466305, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 6521724798416525601, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 5508258879551068211, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 5560692450764658396, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 8379195954435202362, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 7302810906892890752, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 3017871928390736233, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: 4227770440934727327, guid: dca555df739a5a74eadb300411e706e0, type: 3}
-  - {fileID: -8212914165058584373, guid: dca555df739a5a74eadb300411e706e0, type: 3}
+  - {fileID: 6711257252158638106, guid: 4ceab1e3cabea9f4cb72edf24eef4625, type: 3}
+  - {fileID: -1497121213533345291, guid: 4ceab1e3cabea9f4cb72edf24eef4625, type: 3}
+  - {fileID: -5894468589109551015, guid: 4ceab1e3cabea9f4cb72edf24eef4625, type: 3}
   frameDuration: 0.1
   sr: {fileID: 0}
 --- !u!61 &2687021409156327575
@@ -169,17 +162,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.0019214451, y: 0.0028822124}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 2, y: 2}
+    oldSize: {x: 0.4375, y: 1.0625}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1, y: 1}
+  m_Size: {x: 0.3236391, y: 0.96349186}
   m_EdgeRadius: 0
 --- !u!50 &6522842370444583187
 Rigidbody2D:

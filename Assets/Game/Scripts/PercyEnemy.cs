@@ -12,46 +12,61 @@ public class PercyEnemy : Enemy
 
     #region FIELDS
 
-        [Header("NOTES")] [TextArea(4, 10)]
+    [Header("NOTES")]
+        [TextArea(4, 10)] 
         public string notes;
 
-        [Space(20)] [Header("VARIABLES")]
-            
-            [Header("Basic Variables")]
-            public int field;
-            private Rigidbody2D rb;
+        [Header("Basic Settings")]
+        public bool canMove = true;
+        public bool isShooting;
+        private Rigidbody2D rb;
 
-            [Header("Attack")]
-            public GameObject usualChargeProjectile;
-            public int numberOfWaves;
-            public Transform projectileSpawnTransform;
-            public int numberOfProjectilesPerWave;
-            public float delayBetweenProjectilesPerWave;
-            public float delayBetweenWaves;
-            public float shootingCooldown;
-            [ShowOnly] public bool canShoot;
+        [Header("Attack Settings")]
+        public GameObject projectilePrefab;
+        public Transform projectileSpawnPoint;
+        public int numberOfWaves = 3;
+        public int projectilesPerWave = 3;
+        public float delayBetweenProjectiles = 0.2f;
+        public float delayBetweenWaves = 1f;
+        public float shootingCooldown = 2f;
+        [ShowOnly] public bool canShoot = true;
+
+        [Header("Animation Settings")]
+        public Sprite[] idleSprites;
+        public Sprite[] runSprites;
+        public Sprite[] shootSprites;
+        public Sprite[] deathSprites;
+        public float frameRate = 0.1f;
+
+        [ShowOnly] public SpriteRenderer sr;
+        private Coroutine currentAnimation;
+        private Sprite[] currentAnimationSet;
+        private System.Random rng = new System.Random();
 
     #endregion
 
     #region LIFE CYCLE METHODS
-
+    
         /// <summary>
         /// Called when the script instance is being loaded.
         /// Useful for initialization before the game starts.
         /// </summary>
-        void Awake()
+        private void Awake()
         {
             rb = GetComponent<Rigidbody2D>();
+            sr = GetComponent<SpriteRenderer>();
         }
 
         /// <summary>
         /// Called before the first frame update.
         /// Useful for initialization once the game starts.
         /// </summary>
-        void Start()
+        private void Start()
         {
             Initialization();
+            PlayAnimation(idleSprites);
 
+            canMove = true;
             canShoot = true;
         }
 
@@ -59,11 +74,14 @@ public class PercyEnemy : Enemy
         /// Called once per frame.
         /// Use for logic that needs to run every frame, such as user input or animations.
         /// </summary>
-        void Update()
+        private void Update()
         {
-            if(canShoot)
+            if (canShoot)
             {
-                Attack();
+                StartCoroutine(AttackRoutine());
+                
+                float oscillation = (float)(rng.NextDouble() * 2.0 - 1.0);
+                StartCoroutine(ToggleBool(() => canShoot, value => canShoot = value, shootingCooldown + oscillation));
             }
         }
 
@@ -71,74 +89,103 @@ public class PercyEnemy : Enemy
         /// Called at fixed intervals, ideal for physics updates.
         /// Use this for physics-related updates like applying forces or handling Rigidbody physics.
         /// </summary>
-        void FixedUpdate()
+        private void FixedUpdate()
         {
-            Movement();
+            if (!isShooting && canMove)
+            {
+                Move();
+                if (rng.NextDouble() < 0.01f)
+                    StartCoroutine(ToggleBool(() => canMove, value => canMove = value, 0.5f));
+            }
+            else if (!isShooting)
+            {
+                PlayAnimation(idleSprites);
+            }
         }
 
     #endregion
 
     #region CUSTOM METHODS
 
-        /// <summary>
-        /// An example custom method.
-        /// Replace with your own custom logic.
-        /// </summary>
-        public override void Attack()
+        public override void Movement() => Move();
+
+        public override void Attack() => StartCoroutine(AttackRoutine());
+
+        public override void Destruction() => StartCoroutine(EnemyDestruction());
+
+        IEnumerator EnemyDestruction()
         {
-            StartCoroutine(AttackCoroutine());
-            StartCoroutine(ShootCooldown());
+            PlayAnimation(deathSprites);
+            
+            yield return new WaitForSeconds(deathSprites.Length * frameRate);
+
+            DataManager.instance.AddCoins(5);
+            Instantiate(base.destructionVFX, gameObject.transform.position, Quaternion.identity);
+            Destroy(gameObject);
         }
 
-        IEnumerator AttackCoroutine()
+        private void Move()
         {
-            for(int i = 1; i <= numberOfWaves; i++)
+            PlayAnimation(runSprites);
+            float direction = isOnFlip ? -1f : 1f;
+            Vector3 movement = new Vector3(direction * speedValue * Time.fixedDeltaTime, 0f, 0f);
+            transform.position += movement;
+        }
+
+        private IEnumerator AttackRoutine()
+        {
+            isShooting = true;
+            PlayAnimation(shootSprites);
+
+            for (int wave = 0; wave < numberOfWaves; wave++)
             {
-                for(int j = 1; j <= numberOfProjectilesPerWave; j++)
+                for (int i = 0; i < projectilesPerWave; i++)
                 {
-                    GameObject projectileInstance = Instantiate(usualChargeProjectile, projectileSpawnTransform.position, Quaternion.identity);
-                    ProjectileSystem projectileScript = projectileInstance.GetComponent<ProjectileSystem>();
-                    
-                    Vector3 rotationAngle = new Vector3(0f, 0f, 0f);
-                    if(j == 1)
-                    {
-                        rotationAngle = new Vector3 (0f, 0f, 120f);
-                    }
-                    else if(j == 2)
-                    {
-                        rotationAngle = new Vector3 (0f, 0f, 90f);
-                    }
-                    else if(j == 3)
-                    {
-                        rotationAngle = new Vector3 (0f, 0f, 60f);
-                    }
+                    GameObject proj = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                    ProjectileSystem ps = proj.GetComponent<ProjectileSystem>();
 
-                    projectileInstance.transform.eulerAngles = transform.eulerAngles + rotationAngle;
-                    projectileScript.movementDirection = new Vector3(1f, 0f, 0f);
-                
-                    //if(!isOnFlip) projectileScript.movementDirection = new Vector3(1f, 0f, 0f);
-                    //else projectileScript.movementDirection = new Vector3(-1f, 0f, 0f);           
+                    float angle = 90f + (i - 1) * 30f; // spread: 60°, 90°, 120°
+                    proj.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+                    ps.movementDirection = Vector3.right;
 
-                    yield return new WaitForSeconds(delayBetweenProjectilesPerWave);
+                    yield return new WaitForSeconds(delayBetweenProjectiles);
                 }
-                
+
                 yield return new WaitForSeconds(delayBetweenWaves);
+                StartCoroutine(ToggleBool(() => canMove, value => canMove = value, 2f));
             }
+
+            isShooting = false;
         }
 
-        public override void Movement()
+        private IEnumerator ToggleBool(System.Func<bool> getter, System.Action<bool> setter, float duration)
         {
-            if(!isOnFlip) rb.linearVelocity = new Vector2(speedValue, rb.linearVelocity.y);
-            else rb.linearVelocity = new Vector2(-speedValue, rb.linearVelocity.y);
+            setter(false);
+            yield return new WaitForSeconds(duration);
+            setter(true);
         }
 
-        IEnumerator ShootCooldown()
+        private void PlayAnimation(Sprite[] sprites)
         {
-            canShoot = false;
+            if (currentAnimationSet == sprites) return;
 
-            yield return new WaitForSeconds(shootingCooldown);
+            currentAnimationSet = sprites;
 
-            canShoot = true;
+            if (currentAnimation != null)
+                StopCoroutine(currentAnimation);
+
+            currentAnimation = StartCoroutine(AnimationLoop(sprites));
+        }
+
+        private IEnumerator AnimationLoop(Sprite[] sprites)
+        {
+            int index = 0;
+            while (true)
+            {
+                sr.sprite = sprites[index];
+                index = (index + 1) % sprites.Length;
+                yield return new WaitForSeconds(frameRate);
+            }
         }
 
     #endregion

@@ -9,7 +9,7 @@ public abstract class Enemy : MonoBehaviour, IDamagable, IAttackable
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public GameObject enemyProjectile;
+            public GameObject destructionVFX;
             public float speedValue = 4f;
             public int maxHealth = 100;
             public int curHealth = 0;
@@ -43,7 +43,6 @@ public abstract class Enemy : MonoBehaviour, IDamagable, IAttackable
         public void TakeDamage(int damage)
         {
             curHealth -= damage;
-            Debug.Log(name + " took " + damage + " damage. Remaining health: " + curHealth);
             
             if (curHealth <= 0)
             {
@@ -64,7 +63,8 @@ public abstract class Enemy : MonoBehaviour, IDamagable, IAttackable
         /// </summary>
         public virtual void Destruction()
         {
-            Debug.Log(name + " is being destroyed!");
+            DataManager.instance.AddCoins(5);
+            Instantiate(destructionVFX, gameObject.transform.position, Quaternion.identity);
             Destroy(gameObject); 
         }   
     

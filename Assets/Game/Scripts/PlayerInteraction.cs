@@ -24,6 +24,8 @@ public class PlayerInteraction : MonoBehaviour
             public Vector3 cameraOffset;
             [ShowOnly] public CinemachineCamera camera;
             private Tween cameraOffsetTween;
+            public bool isInteracting;
+            public void MobileInteraction() => isInteracting = true;
 
     #endregion
 
@@ -56,10 +58,9 @@ public class PlayerInteraction : MonoBehaviour
         /// Called once per frame.
         /// Use for logic that needs to run every frame, such as user input or animations.
         /// </summary>
-        void Update()
+        void LateUpdate()
         {
-            // Add your per-frame logic here.
-            // Example: Move objects, check user input, update animations, etc.
+            if(isInteracting) isInteracting = false;
         }
 
         /// <summary>

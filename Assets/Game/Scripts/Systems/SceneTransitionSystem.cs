@@ -20,6 +20,7 @@ public class SceneTransitionSystem : MonoBehaviour
             [Header("Basic Variables")]
             public Animator transition;
             public float transitionTime = 1f;
+            public Transform pos;
 
     #endregion
 
@@ -44,8 +45,10 @@ public class SceneTransitionSystem : MonoBehaviour
         /// </summary>
         void Start()
         {         
+            //if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (DataManager.instance.mainScenePos != Vector3.zero))
+               // FindObjectOfType<PlayerInteraction>().gameObject.transform.position = DataManager.instance.mainScenePos;   
             if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (DataManager.instance.mainScenePos != Vector3.zero))
-                FindObjectOfType<PlayerInteraction>().gameObject.transform.position = DataManager.instance.mainScenePos;   
+                FindObjectOfType<PlayerInteraction>().gameObject.transform.position = pos.position;   
         }
 
         /// <summary>
@@ -74,15 +77,20 @@ public class SceneTransitionSystem : MonoBehaviour
 
         public void LoadNextLevel(string sceneName)
         {
-            StartCoroutine(SceneTransition(sceneName));
+            StartCoroutine(SceneTransition(sceneName, false));
+        }
+
+        public void RetryBase(string sceneName)
+        {
+            StartCoroutine(SceneTransition(sceneName, true));
         }
 
         /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>
-        IEnumerator SceneTransition(string sceneName)
+        IEnumerator SceneTransition(string sceneName, bool isRetry = false)
         {
-            if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base")
+            if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (!isRetry))
                 DataManager.instance.mainScenePos = FindObjectOfType<PlayerInteraction>().gameObject.transform.position;
             transition.gameObject.SetActive(true);
             transition.SetTrigger("Start");

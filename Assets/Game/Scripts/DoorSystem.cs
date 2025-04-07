@@ -58,8 +58,10 @@ public class DoorSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Update()
         {
-            if((Input.GetKeyDown(KeyCode.Q)) && (canInteract))
+            if((FindObjectOfType<PlayerShooting>().isShooting) && (canInteract))
             {
+                FindObjectOfType<PlayerShooting>().isShooting = false;
+
                 canInteract = false;
                 interactionScript.DisableIcon();
                 FindObjectOfType<SceneTransitionSystem>().LoadNextLevel(sceneName);

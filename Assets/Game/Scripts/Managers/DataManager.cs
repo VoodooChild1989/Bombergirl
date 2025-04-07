@@ -1,15 +1,9 @@
-using System;
-using System.Linq;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
-using UnityEngine.Playables;
+using UnityEngine.SceneManagement;
 using TMPro;
 
 public class DataManager : MonoBehaviour
 {
-
     #region FIELDS
 
         [Header("NOTES")] [TextArea(4, 10)]
@@ -19,6 +13,7 @@ public class DataManager : MonoBehaviour
             
             [Header("Basic Variables")]
             public int coins;
+            public TMP_Text coinsTMP;
             public Vector3 mainScenePos;
             public static DataManager instance;
 
@@ -41,11 +36,22 @@ public class DataManager : MonoBehaviour
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            coins = PlayerPrefs.GetInt("CoinCount", 50);
+            UpdateCoinText();
+
+            // Register for scene change events
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        /// <summary>
+        /// Called when the scene has been loaded.
+        /// This ensures that the TMP_Text is assigned correctly after each scene change.
+        /// </summary>
+        private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            // Find the TMP_Text in the new scene and assign it
+            coinsTMP = GameObject.Find("Coins (TMP)")?.GetComponent<TMP_Text>();
+            UpdateCoinText(); // Update coins text after the scene has loaded
         }
 
         /// <summary>
@@ -54,8 +60,7 @@ public class DataManager : MonoBehaviour
         /// </summary>
         void Update()
         {
-            // Add your per-frame logic here.
-            // Example: Move objects, check user input, update animations, etc.
+            // You can add any logic that you want to run every frame
         }
 
         /// <summary>
@@ -64,8 +69,7 @@ public class DataManager : MonoBehaviour
         /// </summary>
         void FixedUpdate()
         {
-            // Add physics-related logic here.
-            // Example: Rigidbody movement, applying forces, or collision detection.
+            // Add physics-related logic here if necessary
         }
 
     #endregion
@@ -73,26 +77,25 @@ public class DataManager : MonoBehaviour
     #region CUSTOM METHODS
 
         /// <summary>
-        /// An example custom method.
-        /// Replace with your own custom logic.
+        /// Add coins to the total and update the TMP_Text.
         /// </summary>
-        void ExampleMethod()
+        public void AddCoins(int amount)
         {
-            // Implement custom functionality here.
-            // Example: Execute game-specific behavior or helper logic.
+            coins += amount;
+            UpdateCoinText();
+            PlayerPrefs.SetInt("CoinCount", coins);
         }
 
         /// <summary>
-        /// An example coroutine that waits for 2 seconds.
+        /// Update the TMP_Text component that shows the coin count.
         /// </summary>
-        IEnumerator ExampleCoroutine()
+        private void UpdateCoinText()
         {
-            // Wait for 2 seconds before executing further code.
-            yield return new WaitForSeconds(2f);
-
-            Debug.Log("Action after 2 seconds.");
+            if (coinsTMP != null)
+            {
+                coinsTMP.text = coins.ToString();
+            }
         }
 
     #endregion
-
 }

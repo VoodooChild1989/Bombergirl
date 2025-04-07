@@ -45,8 +45,8 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             public GameObject edge_bottom;
 
             [Header("Enemies")]
-            public GameObject groundEnemy;
-            public GameObject airEnemy;
+            public GameObject[] groundEnemies;
+            public GameObject[] airEnemies;
 
             [Header("Camera Shake")]
             public CinemachineImpulseSource impulseSource;
@@ -229,16 +229,18 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                             // Ground enemies
                             if((!IsFull(i-1,j)) && (!IsFull(i,j)) && (!IsFull(i+1,j)) && (IsFull(i-1,j-1)) && (IsFull(i,j-1)) && (IsFull(i+1,j-1)))
                             {
-                                if(IsValue(0.3f)) 
+                                if(IsValue(0.15f)) 
                                 {
-                                    GameObject enemyInstance = Instantiate(groundEnemy, pos, Quaternion.identity);
+                                    int randIndex = UnityEngine.Random.Range(0, groundEnemies.Length);
+                                    GameObject enemyInstance = Instantiate(groundEnemies[randIndex], pos, Quaternion.identity);
                                 }
                             }
                             else if(CountingFullNeighbours(i, j) == 0)
                             {   
                                 if(IsValue(0.01f)) 
                                 {
-                                    GameObject enemyInstance = Instantiate(airEnemy, pos, Quaternion.identity);
+                                    int randIndex = UnityEngine.Random.Range(0, airEnemies.Length);
+                                    GameObject enemyInstance = Instantiate(airEnemies[randIndex], pos, Quaternion.identity);
                                 }
                             }
                         }

@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
+using UnityEngine.EventSystems;
 using TMPro;
 
 public enum PlayerMovementType
@@ -12,7 +13,7 @@ public enum PlayerMovementType
     Default, Flying
 }
 
-public class PlayerMovement : MonoBehaviour
+public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHandler
 {
 
     #region FIELDS
@@ -68,6 +69,29 @@ public class PlayerMovement : MonoBehaviour
             const string JUMPING_ANIMATION = "Player_Jumping";
             const string DUCKING_ANIMATION = "Player_Ducking";
 
+        [Header("Mobile Controls")]
+            public Joystick joystick;
+            public bool isJumping;
+            public bool isDuckingMobile;
+
+            // Call this via UI Button
+            public void MobileJump() => isJumping = true;
+            //public void MobileStartDucking() => isDuckingMobile = true;
+            public void MobileStartDucking()
+            {
+                if (isGrounded)
+                {
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+                    transform.position += new Vector3(0f, -0.8f, 0f);
+                }
+
+                isDuckingMobile = true;
+            }
+            public void MobileStopDucking() => isDuckingMobile = false;
+
+            [SerializeField] private Canvas myCanvas;
+            [SerializeField] private Camera myCamera;
+
     #endregion
 
     #region LIFE CYCLE METHODS
@@ -94,11 +118,9 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            myCanvas.worldCamera = GameObject.Find("Main Camera (Camera)").GetComponent<Camera>();
+
+            SettingLevels();
         }
 
         /// <summary>
@@ -119,11 +141,13 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void FixedUpdate()
         {
-            if(isInDialogue)
+            if((isInDialogue) || (GameManager.instance.isInCutscene))
             {
                 DefaultState();
                 return;
             }
+
+            if(GetComponent<PlayerShooting>().isInShooting) return;
 
             if(curPlayerMovementType == PlayerMovementType.Default)
             {
@@ -140,6 +164,15 @@ public class PlayerMovement : MonoBehaviour
             }
 
             lastPosition = transform.position;
+        }
+        
+        /// <summary>
+        /// Called once per frame after the Update().
+        /// Use for logic that needs to be held after executing all other tasks.
+        /// </summary>
+        void LateUpdate()
+        {
+            //if(isJumping) isJumping = false;
         }
 
     #endregion
@@ -167,7 +200,7 @@ public class PlayerMovement : MonoBehaviour
                 transform.position += new Vector3(0f, -0.8f, 0f);
             }
 
-            if(Input.GetKey(KeyCode.S))
+            if(Input.GetKey(KeyCode.S) || isDuckingMobile)
             {
                 isDucking = true;
                 animationScript.ChangeAnimationState(DUCKING_ANIMATION);  
@@ -186,7 +219,8 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void Running()
         {
-            float moveInput = Input.GetAxis("Horizontal");
+            //float moveInput = Input.GetAxis("Horizontal");
+            float moveInput = joystick.Horizontal;
             rb.linearVelocity = new Vector2(moveInput * moveSpeed, rb.linearVelocity.y);
 
             // Handling animation
@@ -208,28 +242,27 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void Jumping()
         {
-            // Buffer jumping
-            if (Input.GetKeyDown(KeyCode.Space))
+            if (Input.GetKeyDown(KeyCode.Space) || isJumping)
             {
-                jumpBufferCounter = jumpBufferTime;
-            }
-            else
-            {
-                jumpBufferCounter -= Time.deltaTime;
-            }   
-            
-            // Jumping
-            if (jumpBufferCounter > 0f && (coyoteTimeCounter > 0f || jumpCount < maxJumps - 1))
-            {
-                jumpCount++;
-
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
-                //rb.linearVelocity += Vector2.up * jumpForce;
-                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                if (isGrounded)
+                {
+                    jumpCount = 0;
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                    animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+                }
+                else if (jumpCount < maxJumps - 1)
+                {
+                    jumpCount++;
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+                    rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                    animationScript.ChangeAnimationState(JUMPING_ANIMATION); 
+                }
                 
-                coyoteTimeCounter = 0f;
-                jumpBufferCounter = 0f;
+                isJumping = false;
             }
+
+            // if((!isGrounded) && (isDuckingMobile)) DownwardJumping();
 
             // Downward jumping
             if((!isGrounded) && (isDucking))
@@ -309,9 +342,11 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void FlyingMovement()
         {
-            float horizontalInput = Input.GetAxis("Horizontal");
-            float verticalInput = Input.GetAxis("Vertical");
-            rb.linearVelocity = new Vector2(horizontalInput * moveSpeed, verticalInput * moveSpeed);
+            // float horizontalInput = Input.GetAxis("Horizontal");
+            /// float verticalInput = Input.GetAxis("Vertical");
+            float horInput = joystick.Horizontal;
+            float vertInput = joystick.Vertical;
+            rb.linearVelocity = new Vector2(horInput * moveSpeed, vertInput * moveSpeed);
             
             // Handling animation
             if(!isDucking)
@@ -363,7 +398,8 @@ public class PlayerMovement : MonoBehaviour
         /// </summary>
         void IsOnFlip()
         {
-            float moveInput = Input.GetAxis("Horizontal");
+            //float moveInput = Input.GetAxis("Horizontal");
+            float moveInput = joystick.Horizontal;
 
             if (moveInput > 0f)
             {
@@ -425,5 +461,47 @@ public class PlayerMovement : MonoBehaviour
         }
 
     #endregion
+
+    #region UPGRARES
+
+        public void SettingLevels()
+        {
+            originalMoveSpeed = PlayerPrefs.GetFloat("PlayerSpeed", 5f);
+            maxJumps = PlayerPrefs.GetInt("PlayerJump", 2);
+            jumpForce = PlayerPrefs.GetFloat("PlayerJumpForce", 10f);
+        }
+        
+        public void AddSpeed()
+        {
+            originalMoveSpeed++;
+        
+            PlayerPrefs.SetFloat("PlayerSpeed", originalMoveSpeed);
+        }
+
+        public void AddJump()
+        {
+            maxJumps++;
+        
+            PlayerPrefs.SetInt("PlayerJump", maxJumps);
+        }
+        
+        public void AddJumpForce()
+        {
+            jumpForce++;
+        
+            PlayerPrefs.SetFloat("PlayerJumpForce", jumpForce);
+        }
+
+    #endregion
+
+    public void OnPointerDown(PointerEventData eventData)
+    {
+        MobileStartDucking();
+    }
+
+    public void OnPointerUp(PointerEventData eventData)
+    {
+        MobileStopDucking();
+    }
 
 }

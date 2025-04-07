@@ -44,6 +44,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         /// </summary>
         void Start()
         {
+            SettingLevels();
             curHealth = maxHealth;
         }
 
@@ -75,21 +76,42 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         {
             curHealth -= damage;
             
-            if (curHealth <= 0)
+            if(curHealth <= 0)
             {
-                Destroy(gameObject); 
+                Destruction();
             }
+        }
+        
+        [ContextMenu("DIE")]
+        void Destruction()
+        {
+            GetComponent<WindowManager>().window = GameObject.Find("Death (Banner)");
+            GetComponent<WindowManager>().OpenWindow(true);
+            
+            StartCoroutine(DelayDeath());
+        }
+
+        public void SettingLevels()
+        {
+            maxHealth = PlayerPrefs.GetInt("PlayerMaxHealth", 20);
+        }
+
+        public void AddMaxHealth()
+        {   
+            maxHealth++;
+            curHealth = maxHealth;
+        
+            PlayerPrefs.SetInt("PlayerMaxHealth", maxHealth);
         }
 
         /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>
-        IEnumerator ExampleCoroutine()
+        IEnumerator DelayDeath()
         {
-            // Wait for 2 seconds before executing further code.
-            yield return new WaitForSeconds(2f);
+            yield return new WaitForSeconds(1f);
 
-            Debug.Log("Action after 2 seconds.");
+            Destroy(gameObject); 
         }
 
     #endregion

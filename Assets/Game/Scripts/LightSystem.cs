@@ -19,11 +19,16 @@ public class LightSystem : MonoBehaviour, ITrigger
 
         [Space(20)] [Header("VARIABLES")]
             
-            [Header("Basic Variables")]
+            [Header("Light")]
             public float cityLightIntensity;
             public float mineLightIntensity;
             public bool isUnderMine;
             public Light2D globalLight;
+
+            [Header("Music")]
+            public AudioSource audioSource;
+            public AudioClip cityMusic;
+            public AudioClip mineMusic;
 
     #endregion
 
@@ -48,11 +53,8 @@ public class LightSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Start()
         {
-            // Perform initial setup that occurs when the game starts.
-            // Example: Initialize game state, start coroutines, load resources, etc.
-            
-            // Example of starting a coroutine.
-            // StartCoroutine(ExampleCoroutine());
+            globalLight = GameObject.Find("Global Light 2D (Light)").GetComponent<Light2D>();
+            audioSource = GameObject.Find("Music (Audio Source)").GetComponent<AudioSource>();
         }
 
         /// <summary>
@@ -85,8 +87,8 @@ public class LightSystem : MonoBehaviour, ITrigger
             {
                 isUnderMine = obj.transform.position.y < transform.position.y;
 
-                if(isUnderMine) WeakerLight();
-                else StrongerLight();
+                if(isUnderMine) ToMine();
+                else ToCity();
             }
         }      
         
@@ -96,9 +98,25 @@ public class LightSystem : MonoBehaviour, ITrigger
             {
                 isUnderMine = obj.transform.position.y < transform.position.y;
 
-                if(isUnderMine) WeakerLight();
-                else StrongerLight();
+                if(isUnderMine) ToMine();
+                else ToCity();
             }
+        }
+
+        void ToMine()
+        {
+            WeakerLight();
+
+            audioSource.clip = mineMusic;
+            audioSource.Play();
+        }
+
+        void ToCity()
+        {
+            StrongerLight();
+            
+            audioSource.clip = cityMusic;
+            audioSource.Play();
         }
 
         void WeakerLight()

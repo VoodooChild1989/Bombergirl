@@ -38,6 +38,7 @@ public class DialogueSystem : MonoBehaviour
             [ShowOnly ]public bool isDialogueActive;
             [ShowOnly] public bool isLineAnimating;
             private Coroutine _lineAnimation;
+            private bool isEmojiAnimating = false;
 
             [Header("Emojis")]
             public Sprite[] emojis;
@@ -68,7 +69,7 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
-            EndDialogue();
+            EndDialogue(true);
         }
 
         /// <summary>
@@ -77,7 +78,7 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Update()
         {
-            if((isDialogueActive) && (Input.GetKeyDown(KeyCode.E)))
+            if((isDialogueActive) && (Input.touchCount > 0 && Input.GetTouch(0).phase == TouchPhase.Began))
             {
                 if(isLineAnimating)
                 {
@@ -116,13 +117,27 @@ public class DialogueSystem : MonoBehaviour
             if(timeline != null) timeline.Pause();
 
             isDialogueActive = true;
+
+            // Animate the banner to fade in and scale up
             banner.SetActive(true);
+            banner.transform.localScale = Vector3.zero;  // Start with scale 0 for animation
+            banner.transform.DOScale(Vector3.one, 0.5f).SetEase(Ease.OutBack);
+
+            // Fade in the banner if needed
+            CanvasGroup bannerCanvasGroup = banner.GetComponent<CanvasGroup>();
+            if (bannerCanvasGroup != null)
+            {
+                bannerCanvasGroup.alpha = 0f;  // Start from transparent
+                bannerCanvasGroup.DOFade(1f, 0.5f);  // Fade in
+            }
+
             _currentIndexLine = 0;
             _lineAnimation = StartCoroutine(LineAnimation(lines[_currentIndexLine]));
 
             FindObjectOfType<PlayerMovement>().isInDialogue = true;
             characterNameTMP.text = GetName(lines[_currentIndexLine]);
             ActivateEmoji(GetEmoji(lines[_currentIndexLine]));
+
             camera.Follow = transform; 
             CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
             DOTween.To(() => followScript.FollowOffset, 
@@ -149,10 +164,9 @@ public class DialogueSystem : MonoBehaviour
             else
             {
                 _lineAnimation = StartCoroutine(LineAnimation(lines[_currentIndexLine]));
+                DeactivateEmoji();
+                characterNameTMP.text = GetName(lines[_currentIndexLine]);
             }        
-            
-            DeactivateEmoji();
-            characterNameTMP.text = GetName(lines[_currentIndexLine]);
         }
 
         /// <summary>
@@ -184,17 +198,34 @@ public class DialogueSystem : MonoBehaviour
         /// <summary>
         /// Finishing the dialogue state.
         /// </summary>
-        public void EndDialogue()
+        public void EndDialogue(bool start = false)
         {
             // For cutscenes
             if(timeline != null) timeline.Resume();
 
             isDialogueActive = false;
-            banner.SetActive(false);
+
+            if(!start)
+            {
+                // Animate the banner to fade out and scale down
+                CanvasGroup bannerCanvasGroup = banner.GetComponent<CanvasGroup>();
+                if (bannerCanvasGroup != null)
+                {
+                    bannerCanvasGroup.DOFade(0f, 0.5f);  // Fade out
+                }
+                banner.transform.DOScale(Vector3.zero, 0.5f).SetEase(Ease.InBack)
+                    .OnComplete(() => banner.SetActive(false));  // Hide after animation completes
+            }
+            else
+            {
+                banner.SetActive(false);
+            }
+
             TMPtext.text = "";
             
             FindObjectOfType<PlayerMovement>().isInDialogue = false;
             characterNameTMP.text = "";
+
             camera.Follow = FindObjectOfType<PlayerInteraction>().gameObject.transform;
             CinemachineFollow followScript = camera.GetComponent<CinemachineFollow>();
             DOTween.To(() => followScript.FollowOffset, 
@@ -202,6 +233,8 @@ public class DialogueSystem : MonoBehaviour
                     FindObjectOfType<PlayerInteraction>().cameraOffset, 
                     1f)
                 .SetEase(Ease.InOutQuad);
+
+            DeactivateEmoji();
         }
 
         /// <summary>
@@ -324,6 +357,7 @@ public class DialogueSystem : MonoBehaviour
         {     
             GameObject emojiObj = new GameObject("Emoji");
             activeEmoji = emojiObj;
+            emojiObj.transform.SetParent(gameObject.transform);
             emojiObj.transform.position = transform.position + emojisOffset;
             emojiObj.transform.localScale = Vector3.one * 0.1f;
 
@@ -335,22 +369,24 @@ public class DialogueSystem : MonoBehaviour
             emojiObj.transform.DOScale(emojisTargetScale, 0.4f).SetEase(Ease.OutBack);
             sr.DOFade(1f, 0.4f);
         }
-        
+
         void DeactivateEmoji()
         {
-            if (activeEmoji == null) return;
-
             SpriteRenderer sr = activeEmoji.GetComponent<SpriteRenderer>();
             if (sr == null) return;
 
-            // Scale down and fade out
             Sequence hideSequence = DOTween.Sequence();
             hideSequence.Append(activeEmoji.transform.DOScale(0.1f, 0.3f).SetEase(Ease.InBack));
             hideSequence.Join(sr.DOFade(0f, 0.3f));
-            hideSequence.OnComplete(() => 
+            hideSequence.OnComplete(() =>
             {
-                activeEmoji.SetActive(false);
-                ActivateEmoji(GetEmoji(lines[_currentIndexLine]));
+                Destroy(activeEmoji);
+
+                int emojiIndex = GetEmoji(lines[_currentIndexLine]);
+                if (emojiIndex >= 0)
+                {
+                    ActivateEmoji(emojiIndex);
+                }
             });
         }
 

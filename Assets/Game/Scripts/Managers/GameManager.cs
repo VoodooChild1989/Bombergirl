@@ -24,7 +24,9 @@ public class GameManager : MonoBehaviour
             
             [Header("Basic Variables")]
             public bool isGamePlayed;
+            public bool isInCutscene;
             public static GameManager instance;
+            private HashSet<string> triggeredEvents = new HashSet<string>();
 
             [Header("Data")]
             public int totalPlayTimeDuration;
@@ -106,11 +108,15 @@ public class GameManager : MonoBehaviour
 
         /// <summary>
         /// Restarts the game by reloading the current scene.
+        /// Must be called in play mode in order to work properly.
         /// </summary>
         [ContextMenu("Restart The Game")]
         public void RestartTheGame()
         {
             PlayerPrefs.DeleteAll();
+            PlayerPrefs.Save();
+        
+            SceneManager.LoadScene(SceneManager.GetActiveScene().name);
 
             MyGame.Utils.SystemComment("The App Has Been Restarted!");
         }
@@ -164,7 +170,17 @@ public class GameManager : MonoBehaviour
                     return (int)(DateTime.UtcNow - lastQuitTime).TotalSeconds;
                 }
             }
+
             return 0;
+        }
+
+        public bool TryTriggerOncePersistent(string eventId)
+        {
+            if (PlayerPrefs.HasKey(eventId)) return false;
+
+            PlayerPrefs.SetInt(eventId, 1);
+            PlayerPrefs.Save();
+            return true;
         }
 
     #endregion

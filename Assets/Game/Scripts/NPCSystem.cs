@@ -62,8 +62,10 @@ public class NPCSystem : MonoBehaviour, ITrigger
         /// </summary>
         void Update()
         {
-            if((Input.GetKeyDown(KeyCode.Q)) && (!dialogueScript.isDialogueActive) && (canInteract))
+            if((FindObjectOfType<PlayerShooting>().isShooting) && (canInteract) && (!dialogueScript.isDialogueActive))
             {
+                FindObjectOfType<PlayerShooting>().isShooting = false;
+                
                 canInteract = false;
                 dialogueScript.StartDialogue();
                 interactionScript.DisableIcon();
@@ -106,20 +108,27 @@ public class NPCSystem : MonoBehaviour, ITrigger
             {
                 dialogueScript.StartDialogue();
             
-                //sr.material = outlineMaterial;
-                StartCoroutine(SetMaterial());
+                sr.material = outlineMaterial;
             }
             else
             {
                 canInteract = true;   
                 interactionScript.EnableIcon();
-                //sr.material = outlineMaterial;
-                StartCoroutine(SetMaterial());
+                sr.material = outlineMaterial;
             }
         }
 
         void OnTriggerStay2D(Collider2D obj) 
         {
+            if(!obj.gameObject.CompareTag("Player"))
+            {
+                canInteract = false;
+                interactionScript.DisableIcon();
+                sr.material = originalMaterial;   
+
+                return;
+            }
+
             if((!canInteract) && (!dialogueScript.isDialogueActive) && (obj.gameObject.CompareTag("Player"))) 
             {
                 canInteract = true;   
@@ -135,12 +144,6 @@ public class NPCSystem : MonoBehaviour, ITrigger
                 interactionScript.DisableIcon();
                 sr.material = originalMaterial;
             }
-        }
-
-        IEnumerator SetMaterial()
-        {
-            yield return new WaitForSeconds(0.1f);
-            sr.material = outlineMaterial;
         }
 
     #endregion

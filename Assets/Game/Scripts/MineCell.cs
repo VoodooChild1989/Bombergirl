@@ -45,10 +45,10 @@ public class PlatformerCell : MonoBehaviour
         [ContextMenu("DestroyCell")]
         public void DestroyCell()
         {
-            if(cellName == "Empty") DataManager.instance.coins++;
-            else if(cellName == "Coal") DataManager.instance.coins +=2;
-            else if(cellName == "Crystal") DataManager.instance.coins +=4;
-            else if(cellName == "Gemstone") DataManager.instance.coins +=6;
+            if(cellName == "Empty") DataManager.instance.AddCoins(1);
+            else if(cellName == "Coal") DataManager.instance.AddCoins(2);
+            else if(cellName == "Crystal") DataManager.instance.AddCoins(4);
+            else if(cellName == "Gemstone") DataManager.instance.AddCoins(6);
 
             FindObjectOfType<CellularAutomataAlgorithm>().RemoveCell(posX, posY, destructionVFX);
         }
