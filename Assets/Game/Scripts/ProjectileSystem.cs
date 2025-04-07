@@ -131,6 +131,7 @@ public class ProjectileSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
+            SettingLevels();
             StartCoroutine(ProjectileAnimation());
             SetState();
         }
@@ -387,6 +388,34 @@ public class ProjectileSystem : MonoBehaviour
                     yield return new WaitForSeconds(frameDuration);
                 }
             }
+        }
+
+        public void SettingLevels()
+        {
+            damageAmount = PlayerPrefs.GetInt("PlayerProjDamage", 2);
+
+            if(PlayerPrefs.HasKey("PlayerDirectionWavy")) 
+            {
+                currentDirectionType = DirectionType.Wave;
+            }
+            else 
+            {
+                currentDirectionType = DirectionType.Straight;
+            }
+        }
+        
+        public void SetWavy()
+        {
+            currentDirectionType = DirectionType.Wave;
+        
+            PlayerPrefs.SetInt("PlayerDirectionWavy", true ? 1 : 0);
+        }
+        
+        public void AddDamage()
+        {
+            damageAmount += 2;
+        
+            PlayerPrefs.SetInt("PlayerProjDamage", damageAmount);
         }
 
     #endregion

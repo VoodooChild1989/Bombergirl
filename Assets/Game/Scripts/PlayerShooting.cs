@@ -173,6 +173,8 @@ public class PlayerShooting : MonoBehaviour
         {
             numberOfWaves = PlayerPrefs.GetInt("PlayerWave", 1);
             numberOfProjectilesPerWave = PlayerPrefs.GetInt("PlayerNumber", 2);
+            delayBetweenWaves = PlayerPrefs.GetFloat("PlayerWaveDelay", 1f);
+            shootingCooldown = PlayerPrefs.GetFloat("PlayerShootingCooldown", 1f);
         }
 
         public void AddWave()
@@ -189,6 +191,20 @@ public class PlayerShooting : MonoBehaviour
             PlayerPrefs.SetInt("PlayerNumber", numberOfProjectilesPerWave);
         }
 
+        public void ReduceWaveDelay()
+        {   
+            delayBetweenWaves -= 0.1f;
+        
+            PlayerPrefs.SetFloat("PlayerWaveDelay", delayBetweenWaves);
+        }
+
+        public void ReduceShotCooldown()
+        {   
+            shootingCooldown -= 0.1f;
+        
+            PlayerPrefs.SetFloat("PlayerShootingCooldown", shootingCooldown);
+        }
+        
         /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>

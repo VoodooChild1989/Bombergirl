@@ -20,6 +20,12 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Bon_Bon_Cafe.unity
     guid: 99bc0b72f6cbc4f44af86916f5a85857
+  - enabled: 1
+    path: Assets/Scenes/Nyan_Sushi.unity
+    guid: 37ea6f8cceae1b8439c3c00c64d501b9
+  - enabled: 1
+    path: Assets/Scenes/Health_Center.unity
+    guid: 150479ac4069ab9488495f98f029b98a
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0

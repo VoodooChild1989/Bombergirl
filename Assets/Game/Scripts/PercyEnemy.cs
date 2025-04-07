@@ -119,7 +119,8 @@ public class PercyEnemy : Enemy
             
             yield return new WaitForSeconds(deathSprites.Length * frameRate);
 
-            DataManager.instance.AddCoins(5);
+            DataManager.instance.AddCoins(50);
+            DataManager.instance.AddKill();
             Instantiate(base.destructionVFX, gameObject.transform.position, Quaternion.identity);
             Destroy(gameObject);
         }

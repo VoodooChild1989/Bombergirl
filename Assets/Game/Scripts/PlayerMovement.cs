@@ -147,7 +147,7 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                 return;
             }
 
-            if(GetComponent<PlayerShooting>().isInShooting) return;
+            // if(GetComponent<PlayerShooting>().isInShooting) 
 
             if(curPlayerMovementType == PlayerMovementType.Default)
             {
@@ -232,7 +232,8 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                 }
                 else
                 {
-                    animationScript.ChangeAnimationState(IDLE_ANIMATION);
+                    if(!GetComponent<PlayerShooting>().isInShooting)
+                        animationScript.ChangeAnimationState(IDLE_ANIMATION);
                 }
             }
         }
@@ -351,6 +352,8 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             // Handling animation
             if(!isDucking)
             {
+                if(GetComponent<PlayerShooting>().isInShooting) return;
+                
                 if (isGrounded)
                 {                   
                     if(rb.linearVelocity.x != 0f)
@@ -469,6 +472,15 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             originalMoveSpeed = PlayerPrefs.GetFloat("PlayerSpeed", 5f);
             maxJumps = PlayerPrefs.GetInt("PlayerJump", 2);
             jumpForce = PlayerPrefs.GetFloat("PlayerJumpForce", 10f);
+
+            if(PlayerPrefs.HasKey("PlayerMovementType")) 
+            {
+                curPlayerMovementType = PlayerMovementType.Flying;
+            }
+            else 
+            {
+                curPlayerMovementType = PlayerMovementType.Default;
+            }
         }
         
         public void AddSpeed()
@@ -490,6 +502,13 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             jumpForce++;
         
             PlayerPrefs.SetFloat("PlayerJumpForce", jumpForce);
+        }
+
+        public void ApplyFlight()
+        {
+            curPlayerMovementType = PlayerMovementType.Flying;
+            
+            PlayerPrefs.SetInt("PlayerMovementType", true ? 1 : 0);
         }
 
     #endregion

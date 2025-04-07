@@ -999,12 +999,17 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: Start with a name between two '-'. & - Play a sound
+  isGlitched: 0
+  killsToFree: 0
+  glitchMat: {fileID: 0}
+  sr: {fileID: 0}
   lines:
   - -GARRY-1-Oh, hello to my beautiful store!
   - -GARRY-4-Oh, sorry, I meant 'welcome'.
   - -GARRY-0-I should talk more.
   - -HOLLY-4-Hm...
   - -HOLLY-4-Seems like I have experienced the same thing before.
+  originalLines: []
   sounds: []
   timeline: {fileID: 0}
   banner: {fileID: 2009702459}
@@ -1552,13 +1557,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: 
-  upgradeName: Damage_Button
+  upgradeName: Health_Button
   costTMP: {fileID: 158172666}
   curUpgrade: 2
-  costs: 0100000002000000030000000400000005000000
+  costs: 64000000c80000002c01000090010000f401000058020000bc020000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 1471620448}
+  playerShootingScript: {fileID: 0}
   curIndex: 0
+  proj: {fileID: 0}
 --- !u!1 &1457696666
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,7 +2268,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: Health +1
+  m_text: Health +3
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: 822e4821081923d48a712fe90113ae0f, type: 2}
   m_sharedMaterial: {fileID: -1973291627257876997, guid: 822e4821081923d48a712fe90113ae0f, type: 2}
@@ -3119,13 +3126,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: 
-  upgradeName: Damage_Button
+  upgradeName: JumpForce_Button
   costTMP: {fileID: 1902789844}
   curUpgrade: 3
-  costs: 010000000200000003000000
+  costs: 640000002c010000f4010000bc020000e8030000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 0}
+  playerShootingScript: {fileID: 0}
   curIndex: 0
+  proj: {fileID: 0}
 --- !u!114 &1999852107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3474,11 +3483,11 @@ PrefabInstance:
     - target: {fileID: 7649300730928372617, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Resource
       value: 
-      objectReference: {fileID: 8300000, guid: a14af487f63f8a540b3592ebca2ae83e, type: 3}
+      objectReference: {fileID: 8300000, guid: d45a63689ef73154da8759bfd962821c, type: 3}
     - target: {fileID: 7649300730928372617, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_audioClip
       value: 
-      objectReference: {fileID: 8300000, guid: a14af487f63f8a540b3592ebca2ae83e, type: 3}
+      objectReference: {fileID: 8300000, guid: d45a63689ef73154da8759bfd962821c, type: 3}
     - target: {fileID: 8537519282646260380, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_AnchorMax.x
       value: 0

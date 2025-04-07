@@ -639,7 +639,7 @@ Transform:
   m_GameObject: {fileID: 441797535}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 10.366, y: 0.488, z: 0}
+  m_LocalPosition: {x: 10.366, y: -0.790584, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1025,7 +1025,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5169653341254857459, guid: 977883397ad4cec41b860d4bcae12cbe, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0.66814935
+      value: -1.05
       objectReference: {fileID: 0}
     - target: {fileID: 5169653341254857459, guid: 977883397ad4cec41b860d4bcae12cbe, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1147,11 +1147,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: Start with a name between two '-'. & - Play a sound
+  isGlitched: 0
+  killsToFree: 0
+  glitchMat: {fileID: 0}
+  sr: {fileID: 0}
   lines:
   - -BARRY-3-It's a nice day for another burgr!
   - -BARRY-4-Oh, sorry, I meant 'burger'.
   - -BARRY-0-I should change that sign.
   - -HOLLY-4-Ahahahahahah!
+  originalLines: []
   sounds: []
   timeline: {fileID: 0}
   banner: {fileID: 2009702459}
@@ -1266,7 +1271,7 @@ Transform:
   m_GameObject: {fileID: 823574622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 21.14, y: -0.093, z: 0}
+  m_LocalPosition: {x: 21.14, y: -1.3715842, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1297,7 +1302,7 @@ Transform:
   m_GameObject: {fileID: 1068535881}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 13.899974, y: 1.368584, z: 0}
+  m_LocalPosition: {x: 13.899974, y: 0.09, z: 0}
   m_LocalScale: {x: 1.4113, y: 1.4113, z: 1.4113}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1524,7 +1529,7 @@ Transform:
   m_GameObject: {fileID: 1397674747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 3.287, y: 0.488, z: 0}
+  m_LocalPosition: {x: 3.287, y: -0.790584, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1699,12 +1704,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: 
-  upgradeName: Damage_Button
+  upgradeName: Speed_Button
   costTMP: {fileID: 158172666}
   curUpgrade: 0
-  costs: 0100000002000000030000000400000005000000
+  costs: 0a0000001e000000640000002c010000f4010000bc020000
   playerScript: {fileID: 1471620440}
+  playerHealthScript: {fileID: 0}
+  playerShootingScript: {fileID: 0}
   curIndex: 0
+  proj: {fileID: 0}
 --- !u!1 &1457696666
 GameObject:
   m_ObjectHideFlags: 0
@@ -3098,7 +3106,7 @@ Transform:
   m_GameObject: {fileID: 1886201030}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 15.268, y: 1.616, z: 0}
+  m_LocalPosition: {x: 15.268, y: 0.337416, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3402,12 +3410,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: 
-  upgradeName: Damage_Button
+  upgradeName: Jump_Button
   costTMP: {fileID: 1902789844}
   curUpgrade: 1
-  costs: 010000000200000003000000
+  costs: 32000000640000002c010000f4010000
   playerScript: {fileID: 1471620440}
+  playerHealthScript: {fileID: 0}
+  playerShootingScript: {fileID: 0}
   curIndex: 0
+  proj: {fileID: 0}
 --- !u!114 &1999852107
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3651,11 +3662,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.01745987
+      value: 0.06803131
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0038387775
+      value: -0.0040187836
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3679,19 +3690,19 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: -14.303164
+      value: -14.10578
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: -17.2439
+      value: -15.3194065
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: 14.487364
+      value: 14.240637
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: -16.617125
+      value: -15.728893
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x

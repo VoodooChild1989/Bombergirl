@@ -108,13 +108,13 @@ public class NPCSystem : MonoBehaviour, ITrigger
             {
                 dialogueScript.StartDialogue();
             
-                sr.material = outlineMaterial;
+                if(!dialogueScript.isGlitched) sr.material = outlineMaterial;
             }
             else
             {
                 canInteract = true;   
                 interactionScript.EnableIcon();
-                sr.material = outlineMaterial;
+                if(!dialogueScript.isGlitched) sr.material = outlineMaterial;
             }
         }
 
@@ -124,7 +124,7 @@ public class NPCSystem : MonoBehaviour, ITrigger
             {
                 canInteract = false;
                 interactionScript.DisableIcon();
-                sr.material = originalMaterial;   
+                if(!dialogueScript.isGlitched) sr.material = originalMaterial;   
 
                 return;
             }
@@ -142,7 +142,7 @@ public class NPCSystem : MonoBehaviour, ITrigger
             {
                 canInteract = false;
                 interactionScript.DisableIcon();
-                sr.material = originalMaterial;
+                if(!dialogueScript.isGlitched) sr.material = originalMaterial;
             }
         }
 

@@ -98,7 +98,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
 
         public void AddMaxHealth()
         {   
-            maxHealth++;
+            maxHealth += 3;
             curHealth = maxHealth;
         
             PlayerPrefs.SetInt("PlayerMaxHealth", maxHealth);

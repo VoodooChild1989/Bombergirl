@@ -13,6 +13,7 @@ public class DataManager : MonoBehaviour
             
             [Header("Basic Variables")]
             public int coins;
+            public int killCount;
             public TMP_Text coinsTMP;
             public Vector3 mainScenePos;
             public static DataManager instance;
@@ -36,7 +37,9 @@ public class DataManager : MonoBehaviour
         /// </summary>
         void Start()
         {
-            coins = PlayerPrefs.GetInt("CoinCount", 50);
+            killCount = PlayerPrefs.GetInt("KillCount", 0);
+            
+            coins = PlayerPrefs.GetInt("CoinCount", 200);
             UpdateCoinText();
 
             // Register for scene change events
@@ -84,6 +87,12 @@ public class DataManager : MonoBehaviour
             coins += amount;
             UpdateCoinText();
             PlayerPrefs.SetInt("CoinCount", coins);
+        }
+
+        public void AddKill()
+        {
+            killCount++;
+            PlayerPrefs.SetInt("KillCount", killCount);
         }
 
         /// <summary>

@@ -14,7 +14,7 @@ public interface IButton
 
 public enum UpgradeType
 {
-    Speed, Jump, Health, JumpForce, Wave, Number
+    Speed, Jump, Health, JumpForce, Wave, Number, Damage, WaveDelay, ShotCooldown, Flying, WavyProj
 }
 
 public class UpgradeButton : MonoBehaviour, IButton
@@ -36,6 +36,7 @@ public class UpgradeButton : MonoBehaviour, IButton
             public PlayerHealth playerHealthScript;
             public PlayerShooting playerShootingScript;
             [ShowOnly] public int curIndex;
+            public GameObject proj;
 
     #endregion
 
@@ -107,6 +108,11 @@ public class UpgradeButton : MonoBehaviour, IButton
                     else if(curUpgrade == UpgradeType.Health) playerHealthScript.AddMaxHealth();
                     else if(curUpgrade == UpgradeType.Wave) playerShootingScript.AddWave();
                     else if(curUpgrade == UpgradeType.Number) playerShootingScript.AddNumber();
+                    else if(curUpgrade == UpgradeType.Damage) proj.GetComponent<ProjectileSystem>().SetWavy();
+                    else if(curUpgrade == UpgradeType.WaveDelay) playerShootingScript.ReduceWaveDelay();
+                    else if(curUpgrade == UpgradeType.ShotCooldown) playerShootingScript.ReduceShotCooldown();
+                    else if(curUpgrade == UpgradeType.Flying) playerScript.ApplyFlight();
+                    else if(curUpgrade == UpgradeType.WavyProj) proj.GetComponent<ProjectileSystem>().SetWavy();
 
                     curIndex++;
                     PlayerPrefs.SetInt(upgradeName, curIndex);

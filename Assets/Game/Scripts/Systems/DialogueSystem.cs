@@ -20,7 +20,17 @@ public class DialogueSystem : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Input")]
+            public bool isGlitched;
+            public string characterID;
+            public int killsToFree;
+            public Material glitchMat;
+            public SpriteRenderer sr;
+
+        [Space(20)] [Header("VARIABLES")]
+            
+            [Header("Input")]
             public string[] lines;
+            public string[] originalLines;
             private int _currentIndexLine;
             public AudioClip[] sounds;
             private int _currentIndexSounds;
@@ -60,7 +70,7 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Awake()
         {
-            //
+            sr = GetComponent<SpriteRenderer>();
         }
 
         /// <summary>
@@ -69,6 +79,23 @@ public class DialogueSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
+            if(PlayerPrefs.HasKey(characterID))
+            {
+                isGlitched = false;
+            }
+
+            if(isGlitched)
+            {
+                sr.material = glitchMat;
+            }
+            else
+            {
+                Material spriteLitMat = new Material(Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default"));
+                sr.material = spriteLitMat;
+            }
+
+            originalLines = (string[])lines.Clone();
+
             EndDialogue(true);
         }
 
@@ -92,6 +119,15 @@ public class DialogueSystem : MonoBehaviour
                     NextLine();
                 }
             }   
+
+            if((isGlitched) && (DataManager.instance.killCount >= killsToFree)) 
+            {
+                isGlitched = false;
+                PlayerPrefs.SetInt(characterID, isGlitched ? 1 : 0);
+
+                Material spriteLitMat = new Material(Shader.Find("Universal Render Pipeline/2D/Sprite-Lit-Default"));
+                sr.material = spriteLitMat;
+            }
         }
 
         /// <summary>
@@ -108,13 +144,68 @@ public class DialogueSystem : MonoBehaviour
 
     #region CUSTOM METHODS
 
+        void DistortText()
+        {
+            for (int lineIndex = 0; lineIndex < lines.Length; lineIndex++)
+            {
+                string originalLine = lines[lineIndex];
+                int counter = 0;
+                string newLine = "";
+
+                for (int i = 0; i < originalLine.Length; i++)
+                {
+                    char character = originalLine[i];
+
+                    if ((character == '-') && (counter < 3))
+                    {
+                        counter++;
+                        newLine += character;
+                    }
+                    else if (counter == 3)
+                    {
+                        if (character != '&')
+                        {
+                            // Replace character with a random letter
+                            char randomLetter = (char)UnityEngine.Random.Range('a', 'z' + 1);
+                            newLine += randomLetter;
+                        }
+                        else
+                        {
+                            newLine += character;
+                        }
+                    }
+                    else
+                    {
+                        newLine += character;
+                    }
+                }
+
+                lines[lineIndex] = newLine;
+            }
+        }
+
         /// <summary>
         /// Initializing the dialogue state.
         /// </summary>
         public void StartDialogue()
         {
+            if(isGlitched) DistortText();
+            else lines = (string[])originalLines.Clone();
+
             // For cutscenes
-            if(timeline != null) timeline.Pause();
+            if (timeline != null)
+            {
+                Debug.Log("A");
+                Debug.Log($"Timeline state before: {timeline.state}");
+                Debug.Log($"Timeline asset: {timeline.playableAsset}");
+                
+                if (timeline.state == PlayState.Playing)
+                    timeline.Pause();
+                else
+                    timeline.Play();
+
+                Debug.Log("b");
+            }
 
             isDialogueActive = true;
 
@@ -201,7 +292,12 @@ public class DialogueSystem : MonoBehaviour
         public void EndDialogue(bool start = false)
         {
             // For cutscenes
-            if(timeline != null) timeline.Resume();
+            if(timeline != null) 
+            {
+                Debug.Log("C");
+                timeline.Resume();
+                Debug.Log("D");
+            }
 
             isDialogueActive = false;
 

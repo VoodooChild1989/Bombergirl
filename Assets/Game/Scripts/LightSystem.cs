@@ -111,7 +111,7 @@ public class LightSystem : MonoBehaviour, ITrigger
             audioSource.Play();
         }
 
-        void ToCity()
+        public void ToCity()
         {
             StrongerLight();
             
