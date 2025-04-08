@@ -1148,6 +1148,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: Start with a name between two '-'. & - Play a sound
   isGlitched: 0
+  characterID: 
   killsToFree: 0
   glitchMat: {fileID: 0}
   sr: {fileID: 0}
@@ -1707,7 +1708,7 @@ MonoBehaviour:
   upgradeName: Speed_Button
   costTMP: {fileID: 158172666}
   curUpgrade: 0
-  costs: 0a0000001e000000640000002c010000f4010000bc020000
+  costs: 0a0000001e000000640000002c01000090010000f4010000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 0}
   playerShootingScript: {fileID: 0}
@@ -3413,7 +3414,7 @@ MonoBehaviour:
   upgradeName: Jump_Button
   costTMP: {fileID: 1902789844}
   curUpgrade: 1
-  costs: 32000000640000002c010000f4010000
+  costs: 32000000640000002c01000090010000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 0}
   playerShootingScript: {fileID: 0}

@@ -108,7 +108,7 @@ public class UpgradeButton : MonoBehaviour, IButton
                     else if(curUpgrade == UpgradeType.Health) playerHealthScript.AddMaxHealth();
                     else if(curUpgrade == UpgradeType.Wave) playerShootingScript.AddWave();
                     else if(curUpgrade == UpgradeType.Number) playerShootingScript.AddNumber();
-                    else if(curUpgrade == UpgradeType.Damage) proj.GetComponent<ProjectileSystem>().SetWavy();
+                    else if(curUpgrade == UpgradeType.Damage) proj.GetComponent<ProjectileSystem>().AddDamage();
                     else if(curUpgrade == UpgradeType.WaveDelay) playerShootingScript.ReduceWaveDelay();
                     else if(curUpgrade == UpgradeType.ShotCooldown) playerShootingScript.ReduceShotCooldown();
                     else if(curUpgrade == UpgradeType.Flying) playerScript.ApplyFlight();

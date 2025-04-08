@@ -20,6 +20,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
             [Header("Basic Variables")]
             public int maxHealth = 100;
             public int curHealth = 0;
+            [ShowOnly] public bool isDying;
 
     #endregion
 
@@ -76,7 +77,7 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         {
             curHealth -= damage;
             
-            if(curHealth <= 0)
+            if((curHealth <= 0) && (!isDying))
             {
                 Destruction();
             }
@@ -85,10 +86,15 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         [ContextMenu("DIE")]
         void Destruction()
         {
-            GetComponent<WindowManager>().window = GameObject.Find("Death (Banner)");
-            GetComponent<WindowManager>().OpenWindow(true);
+            isDying = true;
+
+            // GetComponent<WindowManager>().window = GameObject.Find("Death (Banner)");   
+            // GetComponent<WindowManager>().OpenWindow(true);  
+
+            GameObject.Find("Reset Base (Button)").GetComponent<Button>().onClick.Invoke();
             
-            StartCoroutine(DelayDeath());
+            Destroy(gameObject); 
+            //StartCoroutine(DelayDeath());
         }
 
         public void SettingLevels()

@@ -1001,6 +1001,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: Start with a name between two '-'. & - Play a sound
   isGlitched: 0
+  characterID: 
   killsToFree: 0
   glitchMat: {fileID: 0}
   sr: {fileID: 0}
@@ -1123,7 +1124,7 @@ Transform:
   m_GameObject: {fileID: 823574622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 12.75, y: -3.1, z: 0}
+  m_LocalPosition: {x: 12.46, y: -3.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
@@ -1257,7 +1258,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &1397674748
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1312,7 +1313,7 @@ EdgeCollider2D:
   m_EdgeRadius: 0
   m_Points:
   - {x: -0.6870117, y: 0.0066006184}
-  - {x: 2.1142812, y: 0.002681315}
+  - {x: 4.898626, y: 0.022061884}
   m_AdjacentStartPoint: {x: 0, y: 0}
   m_AdjacentEndPoint: {x: 0, y: 0}
   m_UseAdjacentStartPoint: 0
@@ -1381,7 +1382,7 @@ Transform:
   m_GameObject: {fileID: 1397674747}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 23.761, y: -3.418584, z: 0}
+  m_LocalPosition: {x: 7.537, y: -2.719, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1558,7 +1559,7 @@ MonoBehaviour:
   notes: 
   upgradeName: Flying_Button
   costTMP: {fileID: 158172666}
-  curUpgrade: 8
+  curUpgrade: 9
   costs: e8030000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 1471620448}
@@ -2460,7 +2461,7 @@ Transform:
   m_GameObject: {fileID: 1784492768}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.17, y: -0.689, z: 0}
+  m_LocalPosition: {x: 2.72, y: -0.689, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:

@@ -1000,6 +1000,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: Start with a name between two '-'. & - Play a sound
   isGlitched: 0
+  characterID: 
   killsToFree: 0
   glitchMat: {fileID: 0}
   sr: {fileID: 0}
@@ -3129,7 +3130,7 @@ MonoBehaviour:
   upgradeName: JumpForce_Button
   costTMP: {fileID: 1902789844}
   curUpgrade: 3
-  costs: 640000002c010000f4010000bc020000e8030000
+  costs: 640000002c010000f401000058020000bc020000
   playerScript: {fileID: 1471620440}
   playerHealthScript: {fileID: 0}
   playerShootingScript: {fileID: 0}

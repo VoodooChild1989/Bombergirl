@@ -351,8 +351,8 @@ MonoBehaviour:
   isShooting: 0
   projectilePrefab: {fileID: 7929733892105462186, guid: 573f794d4066c4c4c86ca1295016abae, type: 3}
   projectileSpawnPoint: {fileID: 143203260055112047}
-  numberOfWaves: 2
-  projectilesPerWave: 4
+  numberOfWaves: 1
+  projectilesPerWave: 3
   delayBetweenProjectiles: 0.2
   delayBetweenWaves: 0.2
   shootingCooldown: 5

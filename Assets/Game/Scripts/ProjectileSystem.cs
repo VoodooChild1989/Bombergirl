@@ -131,7 +131,7 @@ public class ProjectileSystem : MonoBehaviour
         /// </summary>
         void Start()
         {
-            SettingLevels();
+            if(currentProjectileOwner == ProjectileOwner.Player) SettingLevels();
             StartCoroutine(ProjectileAnimation());
             SetState();
         }
