@@ -58,7 +58,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: -876546973899608171, guid: 609b5fbf46d0f3a4d8dcd265d8eda1a7, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -106,7 +106,9 @@ MonoBehaviour:
     Otherwise, create a separate script that derives from one of them.
   name: Percy
   damageAmount: 1
+  lifetime: 3
   rb: {fileID: 0}
+  col: {fileID: 0}
   idleSprites:
   - {fileID: -1355759981085110696, guid: 66b94c91f0f03d448a667943a4884dff, type: 3}
   - {fileID: 1600616305, guid: 66b94c91f0f03d448a667943a4884dff, type: 3}
@@ -114,6 +116,8 @@ MonoBehaviour:
   frameDuration: 0.1
   destructionVFX: {fileID: 5606322157152105762, guid: 0ef7ce71f95117e449d7821c87aaad1a, type: 3}
   sr: {fileID: 0}
+  camera: {fileID: 0}
+  onScreen: 0
   curDirType: 0
   curScaleType: 0
   movementDir: {x: 1, y: 0, z: 0}

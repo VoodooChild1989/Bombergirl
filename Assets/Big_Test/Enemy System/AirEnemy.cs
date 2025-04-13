@@ -54,9 +54,7 @@ public class AirEnemy : Enemy
         /// Use this for physics-related updates like applying forces or handling Rigidbody physics.
         /// </summary>
         void FixedUpdate()
-        {
-            base.FixedUpdate();
-            
+        {            
             if((!isShooting) && (canMove))
             {
                 Movement();
@@ -97,8 +95,8 @@ public class AirEnemy : Enemy
                 {
                     float angle = 360f / projectilesPerWave;
     
-                    // GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
-                    GameObject projectileInstance = ProjectilePooling.instance.GetProjectile(name);
+                    GameObject projectileInstance = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                    //GameObject projectileInstance = ProjectilePooling.instance.GetProjectile(name);
                     projectileInstance.transform.position = projectileSpawnPoint.position;
                     Projectile projectileScript = projectileInstance.GetComponent<Projectile>();
                     

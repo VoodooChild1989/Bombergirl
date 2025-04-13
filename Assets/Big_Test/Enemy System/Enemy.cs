@@ -200,11 +200,8 @@ public abstract class Enemy : MonoBehaviour, IAttackable, IDamagable
 
             while(true)
             {
-                if(onScreen)
-                {
-                    sr.sprite = sprites[index];
-                    index = (index + 1) % sprites.Length;
-                }            
+                sr.sprite = sprites[index];
+                index = (index + 1) % sprites.Length;
 
                 yield return new WaitForSeconds(frameDuration);
             }

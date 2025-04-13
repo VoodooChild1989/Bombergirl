@@ -18,6 +18,7 @@ public class GroundEnemy : Enemy
         /// </summary>
         void Awake()
         {
+            Debug.Log("Awake gr");
             base.Awake();
             rb.gravityScale = 1f;
         }
@@ -28,6 +29,7 @@ public class GroundEnemy : Enemy
         /// </summary>
         void Start()
         {
+            Debug.Log("Start gr");
             PlayAnimation(idleSprites);
 
             float oscillation = (float)(rng.NextDouble() * 2.0 - 1.0);
@@ -55,7 +57,7 @@ public class GroundEnemy : Enemy
         /// </summary>
         void FixedUpdate()
         {
-            base.FixedUpdate();
+            // base.FixedUpdate();
 
             if((!isShooting) && (canMove))
             {
@@ -95,8 +97,8 @@ public class GroundEnemy : Enemy
             {
                 for(int i = 0; i < projectilesPerWave; i++)
                 {
-                    //GameObject proj = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
-                    GameObject proj = ProjectilePooling.instance.GetProjectile(name);
+                    GameObject proj = Instantiate(projectilePrefab, projectileSpawnPoint.position, Quaternion.identity);
+                    //GameObject proj = ProjectilePooling.instance.GetProjectile(name);
                     proj.transform.position = projectileSpawnPoint.position;
                     Projectile ps = proj.GetComponent<Projectile>();
 

@@ -184,7 +184,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         /// </summary>
         /// <param name="x">The X coordinate of a cell.</param>
         /// <param name="y">The y coordinate of a cell.</param>
-        int CountingFullNeighbours(int x, int y)
+        public int CountingFullNeighbours(int x, int y)
         {
             int count = 0;
 
@@ -461,13 +461,13 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             }
         }
 
-        void AddDecor(GameObject parentObj, GameObject childObj, Vector3 pos)
+        public void AddDecor(GameObject parentObj, GameObject childObj, Vector3 pos)
         {
             GameObject decorObj = Instantiate(childObj, pos, Quaternion.identity);
             decorObj.transform.SetParent(parentObj.transform);
         }
 
-        void AddOre(GameObject parentObj, OreType oreType, Vector3 pos)
+        public void AddOre(GameObject parentObj, OreType oreType, Vector3 pos)
         {
             GameObject objToSpawn = null;
 
@@ -492,7 +492,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         {
             if(vfx != null) 
             {
-                // Instantiate(vfx, _currentGrid[x, y].transform.position, Quaternion.identity);
+                Instantiate(vfx, _currentGrid[x, y].transform.position, Quaternion.identity);
                 impulseSource.GenerateImpulse();
             }
             Destroy(_currentGrid[x, y]);
@@ -523,7 +523,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             return _currentGrid[x, y];
         }
 
-        bool IsValue(float value)
+        public bool IsValue(float value)
         {
             return UnityEngine.Random.value < value ? true : false;
         }

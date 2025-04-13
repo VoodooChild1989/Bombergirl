@@ -61,7 +61,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}
+  - {fileID: -876546973899608171, guid: 609b5fbf46d0f3a4d8dcd265d8eda1a7, type: 3}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,14 +111,14 @@ MonoBehaviour:
   maxHealth: 100
   curHealth: 0
   rb: {fileID: 0}
-  camera: {fileID: 0}
+  col: {fileID: 0}
   speedValue: 4
   canMove: 1
   isOnFlip: 0
   projectilePrefab: {fileID: 6624822916524478802, guid: 294afcb2ed097684382493c262dfc555, type: 3}
   projectileSpawnPoint: {fileID: 1345853773486828838}
   numberOfWaves: 1
-  projectilesPerWave: 1
+  projectilesPerWave: 5
   delayBetweenProjectiles: 0.2
   delayBetweenWaves: 1
   shootingCooldown: 2
@@ -144,8 +144,9 @@ MonoBehaviour:
   curAnimationSet: []
   frameDuration: 0.1
   destructionVFX: {fileID: 5606322157152105762, guid: 5dbe6e5ae22e18042a04aec2f4863868, type: 3}
-  onScreen: 0
   sr: {fileID: 0}
+  camera: {fileID: 0}
+  onScreen: 0
 --- !u!70 &6542791701377318494
 CapsuleCollider2D:
   m_ObjectHideFlags: 0

@@ -42,8 +42,8 @@ public class VisibilityPooling : MonoBehaviour
         {
             while (true)
             {
-                // CheckObjects();
                 Mapper();
+                CheckObjects();
                 yield return new WaitForSeconds(checkInterval);
             }
         }
@@ -61,15 +61,11 @@ public class VisibilityPooling : MonoBehaviour
                     pooledObjects.RemoveAt(i);
                     continue;
                 }
-
-                bool shouldBeActive = IsNearCamera(obj.transform.position);
-
-                if (obj.activeInHierarchy != shouldBeActive)
+                if(!IsNearCamera(obj.transform.position))
                 {
-                    obj.SetActive(shouldBeActive);
-
-                    if (debugLogs)
-                        Debug.Log($"Set {obj.name} active: {shouldBeActive}");
+                    Destroy(obj);
+                    pooledObjects.RemoveAt(i);
+                    continue;
                 }
             }
         }
@@ -82,16 +78,56 @@ public class VisibilityPooling : MonoBehaviour
             {
                 for (int j = 0; j < CA.height; j++)
                 {
-                    if(CA._grid[i,j] == 0) continue;
-
                     Vector3 worldPos = new Vector3(i - (CA.width / 2) + CA.offsetX, j - CA.height + CA.offsetY, 0);
+                    
+                    if(CA._grid[i,j] == 0) 
+                    {
+                        // Adding enemies
+                        if((IsNearCamera(worldPos)) && (CA._isUsedGrid[i,j] == 0) && (i >= 1) && (i <= CA.width - 2) && (j >= 1) && (j <= CA.height - 2))
+                        {
+                            if(CA.IsValue(0.3f)) 
+                            {   
+                                CA._isUsedGrid[i,j] = 1;
+                            }
+
+                            // Ground enemies
+                            if((!CA.IsFull(i-1,j)) && (!CA.IsFull(i,j)) && (!CA.IsFull(i+1,j)) && (CA.IsFull(i-1,j-1)) && (CA.IsFull(i,j-1)) && (CA.IsFull(i+1,j-1)))
+                            {
+                                if(CA.IsValue(0.15f)) 
+                                {
+                                    int randIndex = UnityEngine.Random.Range(0, CA.groundEnemies.Length);
+                                    GameObject enemyInstance = Instantiate(CA.groundEnemies[randIndex], worldPos, Quaternion.identity);
+                                    enemyInstance.name = CA.groundEnemies[randIndex].name;
+                                    ProjectilePooling.instance.percyCounter++;
+                                    
+                                    CA._isUsedGrid[i,j] = 1;
+
+                                    pooledObjects.Add(enemyInstance);
+                                }
+                            } // Air enemies
+                            else if(CA.CountingFullNeighbours(i, j) == 0)
+                            {   
+                                if(CA.IsValue(0.01f)) 
+                                {
+                                    int randIndex = UnityEngine.Random.Range(0, CA.airEnemies.Length);
+                                    GameObject enemyInstance = Instantiate(CA.airEnemies[randIndex], worldPos, Quaternion.identity);
+                                    enemyInstance.name = CA.airEnemies[randIndex].name;
+                                    ProjectilePooling.instance.fairyCounter++;
+                                    
+                                    CA._isUsedGrid[i,j] = 1;
+                                    
+                                    pooledObjects.Add(enemyInstance);
+                                }
+                            }
+                        }
+
+                        continue;
+                    }
 
                     if(IsNearCamera(worldPos))
                     {
                         if((CA._grid[i,j] == 1) && (CA._isUsedGrid[i,j] == 0)) 
                         {
-                            //Instantiate(box, worldPos, Quaternion.identity);
-                            
                             if((i >= 1) && (i <= CA.width - 2) && (j >= 1) && (j <= CA.height - 2) && (!CA.IsFull(i-1,j)) && (!CA.IsFull(i+1,j)) && (!CA.IsFull(i,j-1)) && (!CA.IsFull(i,j+1)))
                             {
                                 CA._currentGrid[i,j] = Instantiate(CA.cells[1].prefab, worldPos, Quaternion.identity); 
@@ -133,13 +169,69 @@ public class VisibilityPooling : MonoBehaviour
                                 CA._currentGrid[i,j] = Instantiate(CA.cells[0].prefab, worldPos, Quaternion.identity); 
                             }
                             
-                            // pooledObjects.Add(_currentGrid[i,j]);
                             CA._isUsedGrid[i,j] = 1;
 
                             PlatformerCell cellScript = CA._currentGrid[i,j].GetComponent<PlatformerCell>();
+                            cellScript.health = (CA.height - j) / 10 + 1;
                             cellScript.posX = i;
                             cellScript.posY = j;
-                            // _currentGrid[i,j].transform.SetParent(GameObject.Find("Cells (Collection)").transform);
+                            CA._currentGrid[i,j].transform.SetParent(GameObject.Find("Cells (Collection)").transform);
+
+                            // Ore type
+                            float initRandomValue = UnityEngine.Random.value;
+                            if(initRandomValue <= 0.3f)
+                            {
+                                float randomValue = UnityEngine.Random.value;
+
+                                if(randomValue <= 0.3f)
+                                {
+                                    cellScript.curOreType = OreType.Coal;
+                                    cellScript.cellName = "Coal";
+                                    CA.AddOre(CA._currentGrid[i,j], cellScript.curOreType, worldPos);
+                                }   
+                                else if(randomValue <= 0.5f)
+                                {
+                                    cellScript.curOreType = OreType.Crystal;
+                                    cellScript.cellName = "Crystal";
+                                    CA.AddOre(CA._currentGrid[i,j], cellScript.curOreType, worldPos);
+                                }
+                                else if(randomValue <= 0.7f)
+                                {
+                                    cellScript.curOreType = OreType.Gemstone;
+                                    cellScript.cellName = "Gemstone";
+                                    CA.AddOre(CA._currentGrid[i,j], cellScript.curOreType, worldPos);
+                                }
+                            }
+
+                            // Adding grass
+                            if((j < CA.height - 1) && (CA._grid[i,j+1] == 0))
+                            {
+                                CA.AddDecor(CA._currentGrid[i,j], CA.grass, worldPos);
+
+                                int randomIndexDetail = UnityEngine.Random.Range(1, 8);
+                                Vector3 posDetail = new Vector3(i - (CA.width / 2) + CA.offsetX, j - CA.height + CA.offsetY + 1, 0);
+
+                                if(randomIndexDetail == 1)
+                                {
+                                    CA.AddDecor(CA._currentGrid[i,j], CA.grass_detail_1, posDetail);
+                                }
+                                else if(randomIndexDetail == 2)
+                                {
+                                    CA.AddDecor(CA._currentGrid[i,j], CA.grass_detail_2, posDetail);
+                                }
+                            }
+                            if((j > 0) && (CA._grid[i,j-1] == 0))
+                            {
+                                CA.AddDecor(CA._currentGrid[i,j], CA.edge_bottom, worldPos);
+                            }
+                            if((i < CA.width - 1) && (CA._grid[i+1,j] == 0))
+                            {
+                                CA.AddDecor(CA._currentGrid[i,j], CA.edge_right, worldPos);
+                            }
+                            if((i > 0) && (CA._grid[i-1,j] == 0))
+                            {
+                                CA.AddDecor(CA._currentGrid[i,j], CA.edge_left, worldPos);
+                            }
                         }
                         else if((CA._grid[i,j] == 1) && (CA._isUsedGrid[i,j] == 1)) 
                         {

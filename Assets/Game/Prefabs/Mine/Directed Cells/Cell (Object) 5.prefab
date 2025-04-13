@@ -106,6 +106,10 @@ MonoBehaviour:
   health: 10
   prefab: {fileID: 1107112142697640275}
   destructionVFX: {fileID: 5606322157152105762, guid: 5dbe6e5ae22e18042a04aec2f4863868, type: 3}
+  sr: {fileID: 0}
+  col: {fileID: 0}
+  camera: {fileID: 0}
+  onScreen: 0
   curOreType: 0
   posX: 0
   posY: 0

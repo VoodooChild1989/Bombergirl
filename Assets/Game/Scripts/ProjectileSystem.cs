@@ -326,7 +326,7 @@ public class ProjectileSystem : MonoBehaviour
 
         void OnCollisionEnter2D(Collision2D obj) 
         {
-            // Instantiate(shootingVFX, transform.position, Quaternion.identity);
+            Instantiate(shootingVFX, transform.position, Quaternion.identity);
 
             if(currentProjectileOwner == ProjectileOwner.Player)
             {

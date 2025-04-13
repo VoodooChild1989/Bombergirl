@@ -43,6 +43,7 @@ public abstract class Projectile : MonoBehaviour
             [Header("Basic Variables")]
             public string name = "Projectile_Name";
             public int damageAmount = 1;
+            public float lifetime = 3f;
             [ShowOnly] public Rigidbody2D rb;
             [ShowOnly] public Collider2D col;
 
@@ -86,6 +87,7 @@ public abstract class Projectile : MonoBehaviour
         {
             Initialization();
             SetState();
+            Destroy(gameObject, lifetime);
 
             if(idleSprites.Length > 0) StartCoroutine(ProjectileAnimation());
         }
