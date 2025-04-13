@@ -111,7 +111,7 @@ public class FairyEnemy : Enemy
 
         public override void Attack() => StartCoroutine(AttackRoutine());
 
-        public override void Destruction() => StartCoroutine(EnemyDestruction());
+        // public override void Destruction() => StartCoroutine(EnemyDestruction());
 
         IEnumerator EnemyDestruction()
         {

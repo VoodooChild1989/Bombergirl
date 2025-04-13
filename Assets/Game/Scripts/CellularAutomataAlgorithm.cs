@@ -19,17 +19,19 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             [Header("Basic Variables")]
             public int width = 120;
             public int height = 80;
-            private int[,] _grid;
+            public int[,] _grid;
+            public int[,] _isUsedGrid;
             public float chanceOfFull = 0.5f;
             public int numberOfSmoothings = 5;
             public int seed = 1;
             public bool useRandomSeed = false;
+            public static CellularAutomataAlgorithm instance;
 
             [Header("Extra")]
             public float offsetX = 0.5f;
             public float offsetY = 0.5f;
             public PlatformerCell[] cells;
-            private GameObject[,] _currentGrid;
+            public GameObject[,] _currentGrid;
 
             [Header("Ores")]
             public GameObject coalObj;
@@ -62,7 +64,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         /// </summary>
         void Awake()
         {
-            //
+            SingletonUtility.MakeSingleton(ref instance, this, false);
         }
 
         /// <summary>
@@ -74,7 +76,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
             InitializeSeed();
             InitializingMap();
             SmoothingMap();
-            InstantiatingMap();
+            // InstantiatingMap();
         }
 
         /// <summary>
@@ -83,18 +85,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         /// </summary>
         void Update()
         {
-            if(Input.GetKeyDown(KeyCode.R)) 
-            {
-                InitializeSeed();
-                InitializingMap();
-                SmoothingMap();
-                InstantiatingMap();
-            }
-
-            if(Input.GetKeyDown(KeyCode.T)) 
-            {
-                //RefreshingMap();
-            }
+            //
         }
 
         /// <summary>
@@ -143,6 +134,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
 
             // Setting up a new grid
             _grid = new int[width, height];
+            _isUsedGrid = new int[width, height];
             _currentGrid = new GameObject[width, height];
 
             for(int i = 0; i < width; i++)
@@ -221,9 +213,9 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                 {
                     Vector3 pos = new Vector3(i - (width / 2) + offsetX, j - height + offsetY, 0);
 
+                    // Adding enemies
                     if(_grid[i,j] == 0) 
                     {
-                        // Adding enemies
                         if((i >= 1) && (i <= width - 2) && (j >= 1) && (j <= height - 2))
                         {
                             // Ground enemies
@@ -233,6 +225,11 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                                 {
                                     int randIndex = UnityEngine.Random.Range(0, groundEnemies.Length);
                                     GameObject enemyInstance = Instantiate(groundEnemies[randIndex], pos, Quaternion.identity);
+                                    enemyInstance.name = groundEnemies[randIndex].name;
+                                    ProjectilePooling.instance.percyCounter++;
+
+                                    VisibilityPooling.instance.pooledObjects.Add(enemyInstance);
+                                    enemyInstance.SetActive(false);
                                 }
                             }
                             else if(CountingFullNeighbours(i, j) == 0)
@@ -241,6 +238,11 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                                 {
                                     int randIndex = UnityEngine.Random.Range(0, airEnemies.Length);
                                     GameObject enemyInstance = Instantiate(airEnemies[randIndex], pos, Quaternion.identity);
+                                    enemyInstance.name = airEnemies[randIndex].name;
+                                    ProjectilePooling.instance.fairyCounter++;
+                                    
+                                    VisibilityPooling.instance.pooledObjects.Add(enemyInstance);
+                                    enemyInstance.SetActive(false);
                                 }
                             }
                         }
@@ -289,6 +291,9 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     {
                         _currentGrid[i,j] = Instantiate(cells[0].prefab, pos, Quaternion.identity); 
                     }
+                    
+                    VisibilityPooling.instance.pooledObjects.Add(_currentGrid[i,j]);
+                    _currentGrid[i,j].SetActive(false);
 
                     // Saving the position
                     PlatformerCell cellScript = _currentGrid[i,j].GetComponent<PlatformerCell>();
@@ -356,6 +361,8 @@ public class CellularAutomataAlgorithm : MonoBehaviour
                     }
                 }
             }
+            
+            ProjectilePooling.instance.SpawnProjs();
         }
 
         void RefreshingMap(int x, int y)
@@ -485,7 +492,7 @@ public class CellularAutomataAlgorithm : MonoBehaviour
         {
             if(vfx != null) 
             {
-                Instantiate(vfx, _currentGrid[x, y].transform.position, Quaternion.identity);
+                // Instantiate(vfx, _currentGrid[x, y].transform.position, Quaternion.identity);
                 impulseSource.GenerateImpulse();
             }
             Destroy(_currentGrid[x, y]);

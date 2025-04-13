@@ -7,30 +7,6 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
-#region ENUMS
-
-    public enum DirectionType
-    {
-        Straight, Wave, AutoNavigation, Spontaneous
-    }
-        
-    public enum WaveDirectionType
-    {
-        Sin, Cos
-    }
-
-    public enum ScaleType
-    {
-        Default, Gradual, Spontaneous
-    }
-
-    public enum ProjectileOwner
-    {
-        Player, Enemy
-    }
-
-#endregion
-
 [RequireComponent(typeof(SpriteRenderer))]
 [RequireComponent(typeof(BoxCollider2D))]
 [RequireComponent(typeof(Rigidbody2D))]
@@ -350,7 +326,7 @@ public class ProjectileSystem : MonoBehaviour
 
         void OnCollisionEnter2D(Collision2D obj) 
         {
-            Instantiate(shootingVFX, transform.position, Quaternion.identity);
+            // Instantiate(shootingVFX, transform.position, Quaternion.identity);
 
             if(currentProjectileOwner == ProjectileOwner.Player)
             {
