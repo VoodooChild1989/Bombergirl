@@ -21,6 +21,7 @@ public class ParallaxLayer : MonoBehaviour
             public float parallaxFactor = 0.5f; // Lower = slower, Higher = closer to camera
             private Vector3 lastCameraPosition;
             private Transform cameraTransform;
+            private float initialYValue;
 
     #endregion
 
@@ -47,6 +48,7 @@ public class ParallaxLayer : MonoBehaviour
         {
             cameraTransform = Camera.main.transform;
             lastCameraPosition = cameraTransform.position;
+            initialYValue = transform.position.y;
         }
 
         /// <summary>
@@ -72,7 +74,15 @@ public class ParallaxLayer : MonoBehaviour
         void LateUpdate()
         {
             Vector3 deltaMovement = cameraTransform.position - lastCameraPosition;
-            transform.position += new Vector3(deltaMovement.x * parallaxFactor, deltaMovement.y * parallaxFactor, 0f);
+
+            // Only apply X parallax movement
+            float parallaxX = deltaMovement.x * parallaxFactor;
+
+            // Apply new position, locking Y
+            Vector3 newPosition = transform.position + new Vector3(parallaxX, 0f, 0f);
+            newPosition.y = initialYValue;
+            transform.position = newPosition;
+
             lastCameraPosition = cameraTransform.position;
         }
 

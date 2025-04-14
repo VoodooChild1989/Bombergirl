@@ -158,7 +158,7 @@ public abstract class Projectile : MonoBehaviour
             {
                 foreach(Sprite sprite in idleSprites)
                 {
-                    if(onScreen) sr.sprite = sprite;
+                    sr.sprite = sprite;
 
                     yield return new WaitForSeconds(frameDuration);
                 }
