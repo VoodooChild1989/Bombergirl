@@ -25,6 +25,7 @@ public class ProjectileSystem : MonoBehaviour
             public Vector3 movementDirection = new Vector3(1f, 0f, 0f);
             public float defaultSpeed = 3f;
             public int damageAmount = 1;
+            public float lifetime = 5f;
             public float destroyObjIn = 10f;
             public AudioClip shootingSFX;
             public GameObject shootingVFX;
@@ -99,6 +100,7 @@ public class ProjectileSystem : MonoBehaviour
         void Awake()
         {
             sr = GetComponent<SpriteRenderer>();
+            Destroy(gameObject, lifetime);
         }
 
         /// <summary>

@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: 
   name: Fairy
-  killingPrice: 5
+  killingPrice: 100
   maxHealth: 100
   curHealth: 0
   rb: {fileID: 0}

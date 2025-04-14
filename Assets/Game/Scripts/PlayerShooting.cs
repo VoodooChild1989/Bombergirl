@@ -29,6 +29,7 @@ public class PlayerShooting : MonoBehaviour
             public int numberOfProjectilesPerWave;
             public float delayBetweenWaves;
             public float shootingCooldown;
+            public GameObject interactionObj;
             [ShowOnly] public bool canShoot;
             [ShowOnly] public bool isInShooting;
             const string ATTACKING_ANIMATION = "Player_Attacking";
@@ -73,7 +74,7 @@ public class PlayerShooting : MonoBehaviour
         {
             if(GameManager.instance.isInCutscene) return;
 
-            if(canShoot)
+            if((!interactionObj.activeInHierarchy) && (canShoot))
             {
                 if(isShooting)
                 {

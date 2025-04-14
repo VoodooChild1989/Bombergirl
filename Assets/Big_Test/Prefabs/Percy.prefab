@@ -107,7 +107,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   notes: 
   name: Percy
-  killingPrice: 5
+  killingPrice: 50
   maxHealth: 100
   curHealth: 0
   rb: {fileID: 0}

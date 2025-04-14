@@ -7,7 +7,7 @@ using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
 
-public class PlayerHealth : MonoBehaviour, IDamagable
+public class ParallaxLayer : MonoBehaviour
 {
 
     #region FIELDS
@@ -18,10 +18,9 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public int maxHealth = 100;
-            public int curHealth = 0;
-            [ShowOnly] public bool isDying;
-            [ShowOnly] Slider healthBar;
+            public float parallaxFactor = 0.5f; // Lower = slower, Higher = closer to camera
+            private Vector3 lastCameraPosition;
+            private Transform cameraTransform;
 
     #endregion
 
@@ -33,7 +32,11 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         /// </summary>
         void Awake()
         {
-            healthBar = GameObject.Find("Health (Slider)").GetComponent<Slider>();
+            // Initialize variables or cache references here.
+            // Example: Setting up components or data before start is called.
+            
+            // Example of adding a component.
+            // MyGame.Utils.AddComponent<SpriteRenderer>(out spriteRenderer, gameObject, this.GetType().Name);   
         }
 
         /// <summary>
@@ -42,9 +45,8 @@ public class PlayerHealth : MonoBehaviour, IDamagable
         /// </summary>
         void Start()
         {
-            SettingLevels();
-            curHealth = maxHealth;
-            UpdateHealthBar();
+            cameraTransform = Camera.main.transform;
+            lastCameraPosition = cameraTransform.position;
         }
 
         /// <summary>
@@ -67,61 +69,36 @@ public class PlayerHealth : MonoBehaviour, IDamagable
             // Example: Rigidbody movement, applying forces, or collision detection.
         }
 
+        void LateUpdate()
+        {
+            Vector3 deltaMovement = cameraTransform.position - lastCameraPosition;
+            transform.position += new Vector3(deltaMovement.x * parallaxFactor, deltaMovement.y * parallaxFactor, 0f);
+            lastCameraPosition = cameraTransform.position;
+        }
+
     #endregion
 
     #region CUSTOM METHODS
 
-        public void TakeDamage(int damage)
+        /// <summary>
+        /// An example custom method.
+        /// Replace with your own custom logic.
+        /// </summary>
+        void ExampleMethod()
         {
-            curHealth -= damage;
-            UpdateHealthBar();
-            
-            if((curHealth <= 0) && (!isDying))
-            {
-                Destruction();
-            }
-        }
-
-        void UpdateHealthBar()
-        {
-            healthBar.value = (float)curHealth / (float)maxHealth;
-        }
-
-        [ContextMenu("DIE")]
-        void Destruction()
-        {
-            isDying = true;
-
-            // GetComponent<WindowManager>().window = GameObject.Find("Death (Banner)");   
-            // GetComponent<WindowManager>().OpenWindow(true);  
-
-            GameObject.Find("Reset Base (Button)").GetComponent<Button>().onClick.Invoke();
-            
-            Destroy(gameObject); 
-            //StartCoroutine(DelayDeath());
-        }
-
-        public void SettingLevels()
-        {
-            maxHealth = PlayerPrefs.GetInt("PlayerMaxHealth", 20);
-        }
-
-        public void AddMaxHealth()
-        {   
-            maxHealth += 3;
-            curHealth = maxHealth;
-        
-            PlayerPrefs.SetInt("PlayerMaxHealth", maxHealth);
+            // Implement custom functionality here.
+            // Example: Execute game-specific behavior or helper logic.
         }
 
         /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>
-        IEnumerator DelayDeath()
+        IEnumerator ExampleCoroutine()
         {
-            yield return new WaitForSeconds(1f);
+            // Wait for 2 seconds before executing further code.
+            yield return new WaitForSeconds(2f);
 
-            Destroy(gameObject); 
+            Debug.Log("Action after 2 seconds.");
         }
 
     #endregion

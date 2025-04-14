@@ -42,7 +42,7 @@ public class VisibilityPooling : MonoBehaviour
         {
             while (true)
             {
-                Mapper();
+                StartCoroutine(MapperCoroutine());
                 CheckObjects();
                 yield return new WaitForSeconds(checkInterval);
             }
@@ -70,15 +70,24 @@ public class VisibilityPooling : MonoBehaviour
             }
         }
 
-        void Mapper()
+        private IEnumerator MapperCoroutine()
         {
             CellularAutomataAlgorithm CA = CellularAutomataAlgorithm.instance;
+            int rowsPerFrame = 5;  
             
             for (int i = 0; i < CA.width; i++)
             {
                 for (int j = 0; j < CA.height; j++)
                 {
                     Vector3 worldPos = new Vector3(i - (CA.width / 2) + CA.offsetX, j - CA.height + CA.offsetY, 0);
+
+                    if(!IsNearCamera(worldPos))
+                    {
+                        if((CA._currentGrid[i, j] != null) && (CA._currentGrid[i, j].activeInHierarchy))
+                            CA._currentGrid[i, j].SetActive(false);   
+                        
+                        continue;
+                    }
                     
                     if(CA._grid[i,j] == 0) 
                     {
@@ -243,6 +252,11 @@ public class VisibilityPooling : MonoBehaviour
                         if ((CA._currentGrid[i, j] != null) && (CA._currentGrid[i, j].activeInHierarchy))
                             CA._currentGrid[i, j].SetActive(false);
                     }
+                }
+                
+                if (i % rowsPerFrame == 0)
+                {
+                    yield return null;
                 }
             }
         }

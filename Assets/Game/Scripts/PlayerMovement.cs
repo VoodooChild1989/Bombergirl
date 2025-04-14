@@ -40,6 +40,12 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             [ShowOnly] public bool isInDialogue;
             [ShowOnly] public PlayerInteraction interactionScript;
 
+            [Header("Switching Modes")]
+            public Image switchModesButtonImage;
+            public Sprite jumpingIcon;
+            public Sprite flyingIcon;
+            [ShowOnly] public bool isFlying;
+
         [Space(20)] [Header("JUMP SETTINGS")]
 
             [Header("Basic Variables")]
@@ -243,8 +249,36 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         /// </summary>
         void Jumping()
         {
-            if (Input.GetKeyDown(KeyCode.Space) || isJumping)
+            if (isJumping)
             {
+                jumpBufferCounter = jumpBufferTime;
+            }
+
+            if (jumpBufferCounter > 0f && (coyoteTimeCounter > 0f || jumpCount < maxJumps))
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+
+                jumpBufferCounter = 0f;
+                isJumping = false;
+
+                if (!isGrounded)
+                {
+                    jumpCount++;
+                }
+            }
+            else
+            {
+                jumpBufferCounter -= Time.fixedDeltaTime;
+            }
+
+            /*
+            if(isJumping)
+            {
+                jumpBufferCounter = jumpBufferTime;
+
+                /*
                 if (isGrounded)
                 {
                     jumpCount = 0;
@@ -259,9 +293,30 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                     rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
                     animationScript.ChangeAnimationState(JUMPING_ANIMATION); 
                 }
-                
+                //
+
                 isJumping = false;
             }
+            else
+            {
+                jumpBufferCounter -= Time.fixedDeltaTime;
+            }
+            */
+
+            /*
+            if (jumpBufferCounter > 0f && (coyoteTimeCounter > 0f || jumpCount < maxJumps))
+            {
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, 0f);
+                rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+                animationScript.ChangeAnimationState(JUMPING_ANIMATION);
+
+                jumpBufferCounter = 0f;
+                if (!isGrounded)
+                {
+                    jumpCount++;
+                }
+            }
+            */
 
             // if((!isGrounded) && (isDuckingMobile)) DownwardJumping();
 
@@ -451,6 +506,23 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             }
         }
         
+        public void SwitchMovementModes()
+        {   
+            isFlying = !isFlying;
+            PlayerPrefs.SetInt("IsFlying", isFlying ? 1 : 0);
+
+            if(isFlying) 
+            {
+                curPlayerMovementType = PlayerMovementType.Flying;
+                switchModesButtonImage.sprite = flyingIcon;
+            }
+            else if(!isFlying) 
+            {
+                curPlayerMovementType = PlayerMovementType.Default;
+                switchModesButtonImage.sprite = jumpingIcon;
+            }
+        }
+
         /// <summary>
         /// Visualization of environment.
         /// </summary>
@@ -475,11 +547,21 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
             if(PlayerPrefs.HasKey("PlayerMovementType")) 
             {
-                curPlayerMovementType = PlayerMovementType.Flying;
+                switchModesButtonImage.gameObject.SetActive(true);
+                
+                isFlying = PlayerPrefs.GetInt("IsFlying", 0) == 1;
+                if(isFlying)
+                {    
+                    curPlayerMovementType = PlayerMovementType.Flying;
+                    switchModesButtonImage.sprite = flyingIcon;
+                }
+
+                // curPlayerMovementType = PlayerMovementType.Flying;
             }
             else 
             {
-                curPlayerMovementType = PlayerMovementType.Default;
+                switchModesButtonImage.gameObject.SetActive(false);
+                // curPlayerMovementType = PlayerMovementType.Default;
             }
         }
         
@@ -506,7 +588,9 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         public void ApplyFlight()
         {
+            switchModesButtonImage.gameObject.SetActive(true);
             curPlayerMovementType = PlayerMovementType.Flying;
+            isFlying = true;
             
             PlayerPrefs.SetInt("PlayerMovementType", true ? 1 : 0);
         }

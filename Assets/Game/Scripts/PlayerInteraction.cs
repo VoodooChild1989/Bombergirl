@@ -26,6 +26,9 @@ public class PlayerInteraction : MonoBehaviour
             private Tween cameraOffsetTween;
             public bool isInteracting;
             public void MobileInteraction() => isInteracting = true;
+            public Image attackButtonImage;
+            public Sprite attackIcon;
+            public Sprite interactionIcon;
 
     #endregion
 
@@ -84,11 +87,13 @@ public class PlayerInteraction : MonoBehaviour
         public void EnableIcon()
         {
             interactionObj.SetActive(true);   
+            attackButtonImage.sprite = interactionIcon;
         }
 
         public void DisableIcon()
         {
             interactionObj.SetActive(false);   
+            attackButtonImage.sprite = attackIcon;
         }
 
         public void ChangeCameraOffset(float x, float y)

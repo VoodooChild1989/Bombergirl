@@ -150,7 +150,6 @@ public abstract class Enemy : MonoBehaviour, IAttackable, IDamagable
             yield return new WaitForSeconds(deathSprites.Length * frameDuration);
 
             KillingAward();
-
             Destroy(gameObject);
         }
 
