@@ -106,6 +106,7 @@ MonoBehaviour:
     Otherwise, create a separate script that derives from one of them.
   name: Player
   damageAmount: 1
+  lifetime: 3
   rb: {fileID: 0}
   col: {fileID: 0}
   idleSprites:
