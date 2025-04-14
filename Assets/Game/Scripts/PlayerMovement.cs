@@ -541,7 +541,7 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
 
         public void SettingLevels()
         {
-            originalMoveSpeed = PlayerPrefs.GetFloat("PlayerSpeed", 5f);
+            originalMoveSpeed = PlayerPrefs.GetFloat("PlayerSpeed", 7f);
             maxJumps = PlayerPrefs.GetInt("PlayerJump", 2);
             jumpForce = PlayerPrefs.GetFloat("PlayerJumpForce", 10f);
 
