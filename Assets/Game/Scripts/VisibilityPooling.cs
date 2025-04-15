@@ -107,7 +107,7 @@ public class VisibilityPooling : MonoBehaviour
                                     int randIndex = UnityEngine.Random.Range(0, CA.groundEnemies.Length);
                                     GameObject enemyInstance = Instantiate(CA.groundEnemies[randIndex], worldPos, Quaternion.identity);
                                     enemyInstance.name = CA.groundEnemies[randIndex].name;
-                                    ProjectilePooling.instance.percyCounter++;
+                                    // ProjectilePooling.instance.percyCounter++;
                                     
                                     CA._isUsedGrid[i,j] = 1;
 
@@ -121,7 +121,7 @@ public class VisibilityPooling : MonoBehaviour
                                     int randIndex = UnityEngine.Random.Range(0, CA.airEnemies.Length);
                                     GameObject enemyInstance = Instantiate(CA.airEnemies[randIndex], worldPos, Quaternion.identity);
                                     enemyInstance.name = CA.airEnemies[randIndex].name;
-                                    ProjectilePooling.instance.fairyCounter++;
+                                    // ProjectilePooling.instance.fairyCounter++;
                                     
                                     CA._isUsedGrid[i,j] = 1;
                                     

@@ -149,7 +149,8 @@ public abstract class Projectile : MonoBehaviour
         public void Destruction()
         {
             Instantiate(destructionVFX, gameObject.transform.position, Quaternion.identity);
-            ProjectilePooling.instance.ReturnProjectile(gameObject);
+            // ProjectilePooling.instance.ReturnProjectile(gameObject);
+            Destroy(gameObject);
         }
 
         IEnumerator ProjectileAnimation()

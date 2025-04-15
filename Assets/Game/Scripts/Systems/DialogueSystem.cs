@@ -294,9 +294,7 @@ public class DialogueSystem : MonoBehaviour
             // For cutscenes
             if(timeline != null) 
             {
-                Debug.Log("C");
                 timeline.Resume();
-                Debug.Log("D");
             }
 
             isDialogueActive = false;

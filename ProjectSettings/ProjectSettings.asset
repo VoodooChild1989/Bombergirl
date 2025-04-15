@@ -266,7 +266,7 @@ PlayerSettings:
   AndroidTargetArchitectures: 3
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: '{inproject}: Assets/BombergirlGame.keystore'
+  AndroidKeystoreName: '{inproject}: Assets/Settings/BombergirlGame.keystore'
   AndroidKeyaliasName: bombergirlalias
   AndroidEnableArmv9SecurityFeatures: 0
   AndroidEnableArm64MTE: 0

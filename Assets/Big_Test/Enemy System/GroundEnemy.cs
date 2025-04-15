@@ -18,7 +18,6 @@ public class GroundEnemy : Enemy
         /// </summary>
         void Awake()
         {
-            Debug.Log("Awake gr");
             base.Awake();
             rb.gravityScale = 1f;
         }
@@ -29,7 +28,6 @@ public class GroundEnemy : Enemy
         /// </summary>
         void Start()
         {
-            Debug.Log("Start gr");
             PlayAnimation(idleSprites);
 
             float oscillation = (float)(rng.NextDouble() * 2.0 - 1.0);

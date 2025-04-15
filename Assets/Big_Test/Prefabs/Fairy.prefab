@@ -108,7 +108,7 @@ MonoBehaviour:
   notes: 
   name: Fairy
   killingPrice: 100
-  maxHealth: 100
+  maxHealth: 5
   curHealth: 0
   rb: {fileID: 0}
   col: {fileID: 0}
@@ -140,7 +140,10 @@ MonoBehaviour:
   - {fileID: 8816457750477824561, guid: 13842688dc492bc4386cb2ac74996f0c, type: 3}
   - {fileID: -3710913674060578355, guid: 13842688dc492bc4386cb2ac74996f0c, type: 3}
   deathSprites:
-  - {fileID: 8320971047129621383, guid: 31796fe7972c7a74d94278a2e873ddcd, type: 3}
+  - {fileID: -2024558339628695994, guid: d957540335abe664fb85deb08bb3c847, type: 3}
+  - {fileID: -7752096935675404704, guid: d957540335abe664fb85deb08bb3c847, type: 3}
+  - {fileID: 6082482352146305967, guid: d957540335abe664fb85deb08bb3c847, type: 3}
+  - {fileID: -2144440038219979985, guid: d957540335abe664fb85deb08bb3c847, type: 3}
   curAnimationSet: []
   frameDuration: 0.1
   destructionVFX: {fileID: 5606322157152105762, guid: 5dbe6e5ae22e18042a04aec2f4863868, type: 3}
