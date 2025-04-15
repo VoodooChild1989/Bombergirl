@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6542791701377318494}
   - component: {fileID: 6241950792929949495}
   m_Layer: 0
-  m_Name: Percy
+  m_Name: Angie
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -82,7 +82,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -5918933805437752817, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
+  m_Sprite: {fileID: -3644746785296583208, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -106,54 +106,49 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   notes: 
-  name: Percy
+  name: Skeleton
   killingPrice: 50
-  maxHealth: 10
+  maxHealth: 20
   curHealth: 0
   rb: {fileID: 0}
   col: {fileID: 0}
   speedValue: 4
   canMove: 1
   isOnFlip: 0
-  projectilePrefab: {fileID: 6624822916524478802, guid: a8ac6c5b1ce1422489fbd1fa82898031, type: 3}
+  projectilePrefab: {fileID: 6624822916524478802, guid: 0426cd295746e724fb1d4761c84db3f0, type: 3}
   projectileSpawnPoint: {fileID: 1345853773486828838}
-  numberOfWaves: 2
-  projectilesPerWave: 3
+  numberOfWaves: 1
+  projectilesPerWave: 2
   delayBetweenProjectiles: 0.2
   delayBetweenWaves: 0.2
-  shootingCooldown: 4
+  shootingCooldown: 3
   canShoot: 1
   isShooting: 0
   idleSprites:
-  - {fileID: -5918933805437752817, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: 5856486272657413929, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: -195329453347598043, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: -9212706719351408863, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: 1892612565032297379, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: 4795720440418288947, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: 3116025200660719993, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: 8052432417052249298, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
-  - {fileID: -3981176717570498600, guid: 0ea8dfe1463d3da4c95f44ac5a75206e, type: 3}
+  - {fileID: -3644746785296583208, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
+  - {fileID: -3989945363805758455, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
+  - {fileID: -2954439241846768513, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
+  - {fileID: -4035141832474423243, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
+  - {fileID: -8951854390727660447, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
+  - {fileID: -7971380309464076729, guid: 1eaea4a7653c9ea4a914092be014ef59, type: 3}
   runSprites:
-  - {fileID: 5734137023018202781, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
-  - {fileID: 3906763631803317690, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
-  - {fileID: -3442337948641553446, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
-  - {fileID: 476021094453051774, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
-  - {fileID: -360990944117047106, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
-  - {fileID: 8680769257699541427, guid: c10e2685a9efd084cb461a1339cc130d, type: 3}
+  - {fileID: 5734137023018202781, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
+  - {fileID: 3906763631803317690, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
+  - {fileID: -3442337948641553446, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
+  - {fileID: 476021094453051774, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
+  - {fileID: -360990944117047106, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
+  - {fileID: 8680769257699541427, guid: 5e789aa0edbb03c4b82ee4faebec8fe9, type: 3}
   shootSprites:
-  - {fileID: 5112333509312773306, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: -552239027100676977, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: 9053082038764719281, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: -8416576901435601354, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: 5302128387949310932, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: 4445338333882865972, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: 4216222800846099889, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
-  - {fileID: 1335942004102565598, guid: bd8cc6484e665d74294b75109f34c4fb, type: 3}
+  - {fileID: 8676479318447980602, guid: dd53a7d03a5c39f479af834a2fa86f10, type: 3}
+  - {fileID: 9023210615936792224, guid: dd53a7d03a5c39f479af834a2fa86f10, type: 3}
+  - {fileID: 3788336175114715261, guid: dd53a7d03a5c39f479af834a2fa86f10, type: 3}
+  - {fileID: 4681407586685929242, guid: dd53a7d03a5c39f479af834a2fa86f10, type: 3}
+  - {fileID: -7760414658436668643, guid: dd53a7d03a5c39f479af834a2fa86f10, type: 3}
   deathSprites:
-  - {fileID: 3991142820630177451, guid: ea2be044e5e32c9489b6da894f54199f, type: 3}
-  - {fileID: 3991142820630177451, guid: ea2be044e5e32c9489b6da894f54199f, type: 3}
-  - {fileID: 3991142820630177451, guid: ea2be044e5e32c9489b6da894f54199f, type: 3}
+  - {fileID: 3991142820630177451, guid: 61b55411a49b2b0499b4f86c213b300c, type: 3}
+  - {fileID: 3991142820630177451, guid: 61b55411a49b2b0499b4f86c213b300c, type: 3}
+  - {fileID: 3991142820630177451, guid: 61b55411a49b2b0499b4f86c213b300c, type: 3}
+  - {fileID: 3991142820630177451, guid: 61b55411a49b2b0499b4f86c213b300c, type: 3}
   curAnimationSet: []
   frameDuration: 0.1
   destructionVFX: {fileID: 5606322157152105762, guid: 5dbe6e5ae22e18042a04aec2f4863868, type: 3}
@@ -194,8 +189,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.04531479, y: -0.058908463}
-  m_Size: {x: 1.0906296, y: 1.3353252}
+  m_Offset: {x: 0.17462504, y: -0.012589574}
+  m_Size: {x: 0.8271048, y: 1.4222798}
   m_Direction: 0
 --- !u!50 &6241950792929949495
 Rigidbody2D:
@@ -252,7 +247,7 @@ Transform:
   m_GameObject: {fileID: 3108574102168670243}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.434, y: -0.093, z: 0}
+  m_LocalPosition: {x: 0.538, y: -0.04, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -488,7 +483,7 @@ Transform:
   m_GameObject: {fileID: 7836902485754791320}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: -0.486, z: 0}
+  m_LocalPosition: {x: 0.496, y: -0.535, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

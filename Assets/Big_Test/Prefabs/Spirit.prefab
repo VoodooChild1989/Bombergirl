@@ -121,7 +121,7 @@ MonoBehaviour:
   projectilesPerWave: 6
   delayBetweenProjectiles: 0.2
   delayBetweenWaves: 1
-  shootingCooldown: 2
+  shootingCooldown: 4
   canShoot: 1
   isShooting: 0
   idleSprites:

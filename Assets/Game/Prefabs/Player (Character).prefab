@@ -383,6 +383,7 @@ MonoBehaviour:
   downwardJumpForce: 10
   minGravitation: 2
   maxGravitation: 3
+  guiPanel: {fileID: 5303577335044051341}
   isDownwardJumping: 0
   isDucking: 0
   isFalling: 0
@@ -678,12 +679,12 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4027525702645291192}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 1
   m_Children: []
-  m_Father: {fileID: 4383028585072946420}
+  m_Father: {fileID: 2219760059864834776}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
@@ -816,7 +817,6 @@ RectTransform:
   - {fileID: 6604707186919224828}
   - {fileID: 1590761456756308935}
   - {fileID: 4998952672352205393}
-  - {fileID: 4899601927838777457}
   m_Father: {fileID: 2219760059864834776}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
@@ -958,6 +958,7 @@ RectTransform:
   m_LocalScale: {x: 0, y: 0, z: 0}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 4899601927838777457}
   - {fileID: 4383028585072946420}
   m_Father: {fileID: 5169653341254857459}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

@@ -174,8 +174,8 @@ public class PlayerShooting : MonoBehaviour
         {
             numberOfWaves = PlayerPrefs.GetInt("PlayerWave", 1);
             numberOfProjectilesPerWave = PlayerPrefs.GetInt("PlayerNumber", 2);
-            delayBetweenWaves = PlayerPrefs.GetFloat("PlayerWaveDelay", 1f);
-            shootingCooldown = PlayerPrefs.GetFloat("PlayerShootingCooldown", 1f);
+            delayBetweenWaves = PlayerPrefs.GetFloat("PlayerWaveDelay", 0.8f);
+            shootingCooldown = PlayerPrefs.GetFloat("PlayerShootingCooldown", 0.5f);
         }
 
         public void AddWave()

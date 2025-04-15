@@ -6,8 +6,9 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Playables;
 using TMPro;
+using DG.Tweening;
 
-public class SceneTransitionSystem : MonoBehaviour
+public class SceneIntro : MonoBehaviour
 {
 
     #region FIELDS
@@ -18,9 +19,7 @@ public class SceneTransitionSystem : MonoBehaviour
         [Space(20)] [Header("VARIABLES")]
             
             [Header("Basic Variables")]
-            public Animator transition;
-            public float transitionTime = 1f;
-            public Transform pos;
+            public RectTransform obj;
 
     #endregion
 
@@ -44,13 +43,8 @@ public class SceneTransitionSystem : MonoBehaviour
         /// Useful for initialization once the game starts.
         /// </summary>
         void Start()
-        {         
-            //if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (DataManager.instance.mainScenePos != Vector3.zero))
-               // FindObjectOfType<PlayerInteraction>().gameObject.transform.position = DataManager.instance.mainScenePos;   
-            if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (DataManager.instance.mainScenePos != Vector3.zero))
-                FindObjectOfType<PlayerInteraction>().gameObject.transform.position = pos.position;   
-
-            if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Main_Menu") FindObjectOfType<SceneIntro>().SceneStart();
+        {
+            //
         }
 
         /// <summary>
@@ -77,33 +71,35 @@ public class SceneTransitionSystem : MonoBehaviour
 
     #region CUSTOM METHODS
 
-        public void LoadNextLevel(string sceneName)
+        /// <summary>
+        /// An example custom method.
+        /// Replace with your own custom logic.
+        /// </summary>
+        public void SceneStart()
         {
-            StartCoroutine(SceneTransition(sceneName, false));
+            obj.anchoredPosition = new Vector2(0, 300);
+            obj.DOAnchorPos(Vector2.zero, 1.5f).SetEase(Ease.OutCubic);
         }
 
-        public void RetryBase(string sceneName)
+        /// <summary>
+        /// An example custom method.
+        /// Replace with your own custom logic.
+        /// </summary>
+        public void SceneEnd()
         {
-            StartCoroutine(SceneTransition(sceneName, true));
+            obj.anchoredPosition = Vector2.zero;
+            obj.DOAnchorPos(new Vector2(0, 300), 1.5f).SetEase(Ease.OutCubic);
         }
 
         /// <summary>
         /// An example coroutine that waits for 2 seconds.
         /// </summary>
-        IEnumerator SceneTransition(string sceneName, bool isRetry = false)
+        IEnumerator ExampleCoroutine()
         {
-            if((UnityEngine.SceneManagement.SceneManager.GetActiveScene().name == "Base") && (!isRetry))
-                DataManager.instance.mainScenePos = FindObjectOfType<PlayerInteraction>().gameObject.transform.position;
-            transition.gameObject.SetActive(true);
-            transition.SetTrigger("Start");
+            // Wait for 2 seconds before executing further code.
+            yield return new WaitForSeconds(2f);
 
-            if(UnityEngine.SceneManagement.SceneManager.GetActiveScene().name != "Main_Menu") FindObjectOfType<SceneIntro>().SceneEnd();
-            
-            if(FindObjectOfType<PlayerMovement>() != null) FindObjectOfType<PlayerMovement>().DisableGUI();
-
-            yield return new WaitForSeconds(transitionTime);
-
-            UnityEngine.SceneManagement.SceneManager.LoadScene(sceneName);
+            Debug.Log("Action after 2 seconds.");
         }
 
     #endregion

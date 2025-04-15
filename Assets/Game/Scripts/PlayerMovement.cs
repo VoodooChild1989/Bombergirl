@@ -31,6 +31,7 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
             public float downwardJumpForce = 10f;
             public float minGravitation;
             public float maxGravitation;
+            public GameObject guiPanel;
             [ShowOnly] public bool isDownwardJumping;
             [ShowOnly] public bool isDucking;
             [ShowOnly] public bool isFalling;
@@ -153,6 +154,8 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
                 return;
             }
 
+            guiPanel.SetActive(true);
+
             // if(GetComponent<PlayerShooting>().isInShooting) 
 
             if(curPlayerMovementType == PlayerMovementType.Default)
@@ -192,7 +195,9 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
         {
             rb.linearVelocity = new Vector2(0f, 0f);
             rb.linearVelocity += Vector2.down * downwardJumpForce;
-            animationScript.ChangeAnimationState(IDLE_ANIMATION);  
+            animationScript.ChangeAnimationState(IDLE_ANIMATION); 
+            joystick.OnPointerUp(null);
+            guiPanel.SetActive(false);
         }
 
         /// <summary>
@@ -605,6 +610,12 @@ public class PlayerMovement : MonoBehaviour, IPointerDownHandler, IPointerUpHand
     public void OnPointerUp(PointerEventData eventData)
     {
         MobileStopDucking();
+    }
+
+    public void DisableGUI()
+    { 
+        joystick.OnPointerUp(null);
+        guiPanel.SetActive(false);   
     }
 
 }
