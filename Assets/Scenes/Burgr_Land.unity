@@ -1734,7 +1734,6 @@ MonoBehaviour:
   notes: 
   stringID: Burgr_Meeting
   isTriggered: 0
-  isPlayerMovable: 0
   isRepeatative: 0
   cutsceneToPlay: {fileID: 0}
   triggerArea: {fileID: 0}
@@ -4105,11 +4104,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.06803131
+      value: 0.0161829
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0040187836
+      value: -2.6189787
       objectReference: {fileID: 0}
     - target: {fileID: 3743681198498857450, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_LocalPosition.z
@@ -4117,43 +4116,43 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].x
-      value: 1.1471229
+      value: 1.1968141
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[0].y
-      value: 6.992383
+      value: 4.135153
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].x
-      value: -13.852299
+      value: -13.95168
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[1].y
-      value: 7.044817
+      value: 3.690677
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].x
-      value: -14.10578
+      value: -13.729124
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[2].y
-      value: -15.3194065
+      value: -11.849804
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].x
-      value: 14.240637
+      value: 13.751764
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[3].y
-      value: -15.728893
+      value: -11.946807
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].x
-      value: 14.133146
+      value: 13.984072
       objectReference: {fileID: 0}
     - target: {fileID: 4299833508618938404, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_Points.m_Paths.Array.data[0].Array.data[4].y
-      value: 6.9499226
+      value: 4.1672277
       objectReference: {fileID: 0}
     - target: {fileID: 5144989448792335275, guid: dc21d2056c6db4341b5b7d06648299e7, type: 3}
       propertyPath: m_AnchorMax.x

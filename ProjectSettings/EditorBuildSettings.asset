@@ -26,6 +26,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Health_Center.unity
     guid: 150479ac4069ab9488495f98f029b98a
+  - enabled: 1
+    path: Assets/Scenes/Level_Selection.unity
+    guid: a1fe166c3e41cbe47adc0eadb71cfb2d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 2bcd2660ca9b64942af0de543d8d7100, type: 3}
   m_UseUCBPForAssetBundles: 0
